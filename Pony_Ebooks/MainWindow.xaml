@@ -1,16 +1,39 @@
 ﻿<Window x:Class="Pony_Ebooks.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:PonyEbooks="clr-namespace:Pony_Ebooks"
+        Title="MainWindow" Height="350" Width="525"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance d:Type=PonyEbooks:MainWindowViewModel}">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
-            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" x:Name="_textblock"/>
+        <TextBlock Grid.Row="0" Text="{Binding Path=NextChain}"></TextBlock>
+        <TextBlock Grid.Row="1" Text="{Binding Path=NextTweetTime}"></TextBlock>
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+            <ItemsControl ItemsSource="{Binding Path=PreviousTweets}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                    </DataTemplate>
+            </ItemsControl.ItemTemplate>
+                </ItemsControl>
         </ScrollViewer>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Button Margin="5" Click="Generate">Generate New Chain</Button>
+            <Button Margin="5" Click="Post">Post Current Chain</Button>
+        </StackPanel>
         
-        <Button Grid.Row="1" Margin="5" Click="ButtonBase_OnClick">Load Timeline</Button>
     </Grid>
 </Window>

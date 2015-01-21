@@ -6,7 +6,7 @@
 // //  WR Medical Electronics Company
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:16 AM, 21/01/2015
+// //  Last Changed Date: 6:31 AM, 21/01/2015
 // //  Created Date: 5:29 AM, 21/01/2015
 // // 
 // //  Notes:
@@ -69,7 +69,7 @@ namespace Pony_Ebooks {
         ///
         /// <value> The previous tweets. </value>
         ///=================================================================================================
-        public ObservableCollection<string> PreviousTweets { get; set; }
+        public ObservableCollection<StringObject> PreviousTweets { get; set; }
 
         ///=================================================================================================
         /// <summary>   Gets or sets the post timer. </summary>
@@ -116,7 +116,7 @@ namespace Pony_Ebooks {
         ///=================================================================================================
         private bool InitVars( ) {
             this.RandomGenerator = new Random( );
-            this.SourceTextFileName = "AllSeasons.txt";
+            this.SourceTextFileName = "S1.txt";
 
             return true;
         }
@@ -155,8 +155,16 @@ namespace Pony_Ebooks {
         public void PublishTweet( ) {
             // Post Markov's NextChain
             Tweet.PublishTweet( this.NextChain );
-            this.PreviousTweets.Add(
-                string.Format( "{0} {1}", this.NextChain, DateTime.Now.ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" ) ) );
+            this.PreviousTweets.Insert(
+                0,
+                new StringObject
+                    {
+                        Value =
+                            string.Format(
+                                "{0} {1}",
+                                this.NextChain,
+                                DateTime.Now.ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" ) )
+                    } );
         }
 
         ///=================================================================================================
@@ -229,6 +237,14 @@ namespace Pony_Ebooks {
 
             return output;
         }
+
+        #endregion
+    }
+
+    public class StringObject {
+        #region Properties
+
+        public string Value { get; set; }
 
         #endregion
     }

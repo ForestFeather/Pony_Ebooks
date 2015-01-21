@@ -6,7 +6,7 @@
 // //  WR Medical Electronics Company
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:26 AM, 19/01/2015
+// //  Last Changed Date: 6:34 AM, 21/01/2015
 // //  Created Date: 7:10 PM, 18/01/2015
 // // 
 // //  Notes:
@@ -15,10 +15,7 @@
 
 #region Imported Namespaces
 
-using System.Linq;
 using System.Windows;
-
-using Tweetinvi;
 
 #endregion
 
@@ -40,29 +37,48 @@ namespace Pony_Ebooks {
         ///=================================================================================================
         public MainWindow( ) {
             this.InitializeComponent( );
+            this.ViewModel = new MainWindowViewModel( );
+            ViewModel.Initialize( );
+            this.DataContext = this.ViewModel;
         }
+
+        #endregion
+
+        #region Properties
+
+        ///=================================================================================================
+        /// <summary>   Gets or sets the view model. </summary>
+        ///
+        /// <value> The view model. </value>
+        ///=================================================================================================
+        public MainWindowViewModel ViewModel { get; set; }
 
         #endregion
 
         #region Members
 
         ///=================================================================================================
-        /// <summary>   Event handler. Called by ButtonBase for on click events. </summary>
+        /// <summary>   Generates. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/19/2015. </remarks>
+        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
         ///
         /// <param name="sender">   Source of the event. </param>
         /// <param name="e">        Routed event information. </param>
         ///=================================================================================================
-        private void ButtonBase_OnClick( object sender, RoutedEventArgs e ) {
-            var tweets = Timeline.GetHomeTimeline( );
+        private void Generate( object sender, RoutedEventArgs e ) {
+            this.ViewModel.GenerateNewChainAndTime( );
+        }
 
-            var output = tweets.Aggregate(
-                string.Empty,
-                ( current, tweet ) =>
-                current + string.Format( "{0}\r\n{1}, {2}\r\n", tweet.Text, tweet.Creator, tweet.CreatedAt ) );
-
-            this._textblock.Text = output;
+        ///=================================================================================================
+        /// <summary>   Post this message. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
+        ///
+        /// <param name="sender">   Source of the event. </param>
+        /// <param name="e">        Routed event information. </param>
+        ///=================================================================================================
+        private void Post( object sender, RoutedEventArgs e ) {
+            this.ViewModel.PublishTweet( );
         }
 
         #endregion
