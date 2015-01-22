@@ -2,11 +2,8 @@
 // // 
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
-// //  Copyright 2011-2013
-// //  WR Medical Electronics Company
-// // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:31 AM, 21/01/2015
+// //  Last Changed Date: 6:00 PM, 21/01/2015
 // //  Created Date: 5:29 AM, 21/01/2015
 // // 
 // //  Notes:
@@ -17,11 +14,13 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
-using Markov;
+using Pony_Ebooks.Markov;
 
 using Tweetinvi;
 
@@ -32,8 +31,17 @@ namespace Pony_Ebooks {
     /// <summary>   Main window view model. </summary>
     ///
     /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
+    ///
+    /// <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
     ///=================================================================================================
-    public class MainWindowViewModel {
+    public class MainWindowViewModel : INotifyPropertyChanged {
+
+        /// <summary>   The next chain. </summary>
+        private string _nextChain;
+
+        /// <summary>   Time of the next tweet. </summary>
+        private string _nextTweetTime;
+
         #region Properties
 
         ///=================================================================================================
@@ -41,7 +49,13 @@ namespace Pony_Ebooks {
         ///
         /// <value> The next chain. </value>
         ///=================================================================================================
-        public string NextChain { get; set; }
+        public string NextChain {
+            get { return this._nextChain; }
+            set {
+                this._nextChain = value;
+                this.OnPropertyChanged( );
+            }
+        }
 
         ///=================================================================================================
         /// <summary>   Gets or sets the markov generator. </summary>
@@ -90,7 +104,20 @@ namespace Pony_Ebooks {
         ///
         /// <value> The time of the next tweet. </value>
         ///=================================================================================================
-        public string NextTweetTime { get; set; }
+        public string NextTweetTime {
+            get { return this._nextTweetTime; }
+            set {
+                this._nextTweetTime = value;
+                this.OnPropertyChanged( );
+            }
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>   Occurs when a property value changes. </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
@@ -117,6 +144,7 @@ namespace Pony_Ebooks {
         private bool InitVars( ) {
             this.RandomGenerator = new Random( );
             this.SourceTextFileName = "S1.txt";
+            this.PreviousTweets = new ObservableCollection<StringObject>( );
 
             return true;
         }
@@ -155,16 +183,10 @@ namespace Pony_Ebooks {
         public void PublishTweet( ) {
             // Post Markov's NextChain
             Tweet.PublishTweet( this.NextChain );
-            this.PreviousTweets.Insert(
-                0,
-                new StringObject
-                    {
-                        Value =
-                            string.Format(
-                                "{0} {1}",
-                                this.NextChain,
-                                DateTime.Now.ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" ) )
-                    } );
+            var s = string.Format(
+                "{0} {1}", this.NextChain, DateTime.Now.ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" ) );
+            Console.WriteLine( s );
+            this.PreviousTweets.Insert( 0, new StringObject { Value = s } );
         }
 
         ///=================================================================================================
@@ -178,6 +200,7 @@ namespace Pony_Ebooks {
 
             // Set Markov
             this.NextChain = next;
+            Console.WriteLine( next );
 
             // Update the timer
             var hours = this.RandomGenerator.Next( 1, 2 );
@@ -197,6 +220,7 @@ namespace Pony_Ebooks {
         ///=================================================================================================
         private bool InitMarkov( ) {
             this.SourceText = File.ReadAllText( this.SourceTextFileName );
+            this.MarkovGenerator = new MarkovChain<string>( 1 );
 
             if( string.IsNullOrEmpty( this.SourceText ) ) {
                 Console.WriteLine( "No text in generator file to load!" );
@@ -233,17 +257,42 @@ namespace Pony_Ebooks {
                 }
 
                 len = output.ToCharArray( ).Length;
-            } while( len >= 120 );
+            } while( len >= 120 ||
+                     len <= 12 );
 
             return output;
+        }
+
+        ///=================================================================================================
+        /// <summary>   Executes the property changed action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
+        ///
+        /// <param name="propertyName"> (Optional) name of the property. </param>
+        ///=================================================================================================
+        protected virtual void OnPropertyChanged( [ CallerMemberName ] string propertyName = null ) {
+            var handler = this.PropertyChanged;
+            if( handler != null ) {
+                handler( this, new PropertyChangedEventArgs( propertyName ) );
+            }
         }
 
         #endregion
     }
 
+    ///=================================================================================================
+    /// <summary>   String object. </summary>
+    ///
+    /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
+    ///=================================================================================================
     public class StringObject {
         #region Properties
 
+        ///=================================================================================================
+        /// <summary>   Gets or sets the value. </summary>
+        ///
+        /// <value> The value. </value>
+        ///=================================================================================================
         public string Value { get; set; }
 
         #endregion

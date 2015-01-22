@@ -2,11 +2,8 @@
 // // 
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindow.xaml.cs 
 // // 
-// //  Copyright 2011-2013
-// //  WR Medical Electronics Company
-// // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:34 AM, 21/01/2015
+// //  Last Changed Date: 6:00 PM, 21/01/2015
 // //  Created Date: 7:10 PM, 18/01/2015
 // // 
 // //  Notes:
@@ -38,7 +35,7 @@ namespace Pony_Ebooks {
         public MainWindow( ) {
             this.InitializeComponent( );
             this.ViewModel = new MainWindowViewModel( );
-            ViewModel.Initialize( );
+            this.ViewModel.Initialize( );
             this.DataContext = this.ViewModel;
         }
 

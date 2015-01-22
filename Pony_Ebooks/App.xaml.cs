@@ -2,11 +2,8 @@
 // // 
 // //  File ID: Pony_Ebooks - Pony_Ebooks - App.xaml.cs 
 // // 
-// //  Copyright 2011-2013
-// //  WR Medical Electronics Company
-// // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:14 PM, 18/01/2015
+// //  Last Changed Date: 6:00 PM, 21/01/2015
 // //  Created Date: 7:10 PM, 18/01/2015
 // // 
 // //  Notes:
