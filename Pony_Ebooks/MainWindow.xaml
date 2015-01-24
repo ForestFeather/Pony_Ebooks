@@ -33,6 +33,7 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Button Margin="5" Click="Generate">Generate New Chain</Button>
             <Button Margin="5" Click="Post">Post Current Chain</Button>
+            <Button Margin="5" Click="Time">New Time</Button>
         </StackPanel>
         
     </Grid>

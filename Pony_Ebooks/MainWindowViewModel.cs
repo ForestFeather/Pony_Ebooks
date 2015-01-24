@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:00 PM, 21/01/2015
+// //  Last Changed Date: 11:00 PM, 21/01/2015
 // //  Created Date: 5:29 AM, 21/01/2015
 // // 
 // //  Notes:
@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows.Threading;
 
 using Pony_Ebooks.Markov;
 
@@ -35,6 +36,9 @@ namespace Pony_Ebooks {
     /// <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
     ///=================================================================================================
     public class MainWindowViewModel : INotifyPropertyChanged {
+
+        /// <summary>   The dispatcher. </summary>
+        private Dispatcher _dispatcher;
 
         /// <summary>   The next chain. </summary>
         private string _nextChain;
@@ -131,7 +135,11 @@ namespace Pony_Ebooks {
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///=================================================================================================
         public bool Initialize( ) {
-            return this.InitVars( ) && this.InitMarkov( ) && this.InitTimer( );
+            var initialize = this.InitVars( ) && this.InitMarkov( ) && this.InitTimer( );
+            if( initialize ) {
+                this.GenerateNewChainAndTime( );
+            }
+            return initialize;
         }
 
         ///=================================================================================================
@@ -145,6 +153,7 @@ namespace Pony_Ebooks {
             this.RandomGenerator = new Random( );
             this.SourceTextFileName = "S1.txt";
             this.PreviousTweets = new ObservableCollection<StringObject>( );
+            this._dispatcher = Dispatcher.CurrentDispatcher;
 
             return true;
         }
@@ -184,9 +193,10 @@ namespace Pony_Ebooks {
             // Post Markov's NextChain
             Tweet.PublishTweet( this.NextChain );
             var s = string.Format(
-                "{0} {1}", this.NextChain, DateTime.Now.ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" ) );
+                "POST: {0} {1}", this.NextChain, DateTime.Now.ToString( "MM'/'dd'/'yyyy hh':'mm':'ss" ) );
             Console.WriteLine( s );
-            this.PreviousTweets.Insert( 0, new StringObject { Value = s } );
+            this._dispatcher.BeginInvoke(
+                new Action( ( ) => this.PreviousTweets.Insert( 0, new StringObject { Value = s } ) ) );
         }
 
         ///=================================================================================================
@@ -203,12 +213,24 @@ namespace Pony_Ebooks {
             Console.WriteLine( next );
 
             // Update the timer
-            var hours = this.RandomGenerator.Next( 1, 2 );
+            var timeSpan = this.ChangeTimerSpan( );
+            this.NextTweetTime = ( DateTime.Now + timeSpan ).ToString( "MM'/'dd'/'yyyy hh':'mm':'ss" );
+        }
+
+        ///=================================================================================================
+        /// <summary>   Gets the change timer span. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
+        ///
+        /// <returns>   . </returns>
+        ///=================================================================================================
+        public TimeSpan ChangeTimerSpan( ) {
+            var hours = this.RandomGenerator.Next( 0, 2 );
             var minutes = this.RandomGenerator.Next( 0, 59 );
             var seconds = this.RandomGenerator.Next( 0, 59 );
             var timeSpan = new TimeSpan( hours, minutes, seconds );
-            this.NextTweetTime = ( DateTime.Now + timeSpan ).ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" );
             this.PostTimer.Change( timeSpan, new TimeSpan( ) );
+            return timeSpan;
         }
 
         ///=================================================================================================
@@ -258,7 +280,7 @@ namespace Pony_Ebooks {
 
                 len = output.ToCharArray( ).Length;
             } while( len >= 120 ||
-                     len <= 12 );
+                     len <= 24 );
 
             return output;
         }

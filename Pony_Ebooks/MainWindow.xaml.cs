@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindow.xaml.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:00 PM, 21/01/2015
+// //  Last Changed Date: 10:57 PM, 21/01/2015
 // //  Created Date: 7:10 PM, 18/01/2015
 // // 
 // //  Notes:
@@ -76,6 +76,19 @@ namespace Pony_Ebooks {
         ///=================================================================================================
         private void Post( object sender, RoutedEventArgs e ) {
             this.ViewModel.PublishTweet( );
+            this.ViewModel.GenerateNewChainAndTime( );
+        }
+
+        ///=================================================================================================
+        /// <summary>   Times. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
+        ///
+        /// <param name="sender">   Source of the event. </param>
+        /// <param name="e">        Routed event information. </param>
+        ///=================================================================================================
+        private void Time( object sender, RoutedEventArgs e ) {
+            this.ViewModel.ChangeTimerSpan( );
         }
 
         #endregion
