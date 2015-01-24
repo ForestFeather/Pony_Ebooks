@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 10:02 AM, 24/01/2015
+// //  Last Changed Date: 12:28 PM, 24/01/2015
 // //  Created Date: 8:12 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -105,7 +105,12 @@ namespace Pony_Ebooks.ViewModels {
                                          MinChars = 16,
                                          MaxChars = 128
                                      };
-            this.TimerControl = new TimerControl( ) { MinSeconds = 300, MaxSeconds = 10800 };
+            this.TimerControl = new TimerControl( )
+                                    {
+                                        MinSeconds = 300,
+                                        MaxSeconds = 10800,
+                                        TimerEvent = this.TimerEvent
+                                    };
             this.TweetManager = new TweetManager( );
             this.CurrentStatusViewModel = new CurrentStatusViewModel( this.MarkovManager, this.TimerControl );
             this.CommandRowViewModel = new CommandRowViewModel(
@@ -119,7 +124,24 @@ namespace Pony_Ebooks.ViewModels {
                                              }
                                      };
 
-            return this.MarkovManager.Initialize( ) && this.TimerControl.Initialize( );
+            return this.MarkovManager.Initialize( ) && this.TimerControl.Initialize( ) && this.TimerControl.Start( );
+        }
+
+        #endregion
+
+        #region Members
+
+        ///=================================================================================================
+        /// <summary>   Timer event. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///=================================================================================================
+        private void TimerEvent( object obj ) {
+            this.TimerControl.NewTriggerTime( );
+            this.TweetManager.Post( this.MarkovManager.NextChain );
+            this.MarkovManager.GenerateNewChain( );
         }
 
         #endregion
