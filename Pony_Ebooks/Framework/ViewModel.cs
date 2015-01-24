@@ -12,6 +12,7 @@
 
 #region Imported Namespaces
 
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -45,6 +46,7 @@ namespace Pony_Ebooks.Framework {
         ///=================================================================================================
         public void Dispose( ) {
             this.OnDispose( true );
+            GC.SuppressFinalize( this );
         }
 
         ///=================================================================================================

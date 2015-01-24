@@ -114,7 +114,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Framework\IViewModel.cs" />
+    <Compile Include="Framework\interfaces\IRelayCommand.cs" />
+    <Compile Include="Framework\interfaces\ITabViewModel.cs" />
+    <Compile Include="Framework\interfaces\IViewModel.cs" />
+    <Compile Include="Framework\RelayCommand.cs" />
+    <Compile Include="Framework\TabViewModel.cs" />
+    <Compile Include="Framework\ViewModel.cs" />
     <Compile Include="UserControls\CommandRowView.xaml.cs">
       <DependentUpon>CommandRowView.xaml</DependentUpon>
     </Compile>
@@ -143,6 +148,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\interfaces\ICommandRowViewModel.cs" />
+    <Compile Include="ViewModels\interfaces\ICurrentStatusViewModel.cs" />
+    <Compile Include="ViewModels\interfaces\IMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Markov\ChainState.cs" />
     <Compile Include="Markov\IRandom.cs" />
