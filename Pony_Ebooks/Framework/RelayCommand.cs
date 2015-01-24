@@ -42,7 +42,7 @@ namespace Pony_Ebooks.Framework {
         ///
         /// <param name="execute">  The execute. </param>
         ///=================================================================================================
-        private RelayCommand( Action<object> execute ) {
+        public RelayCommand( Action<object> execute ) {
             this._execute = execute;
         }
 
@@ -54,7 +54,7 @@ namespace Pony_Ebooks.Framework {
         /// <param name="execute">      The execute. </param>
         /// <param name="canExecute">   The can execute. </param>
         ///=================================================================================================
-        private RelayCommand( Action<object> execute, Predicate<object> canExecute ) {
+        public RelayCommand( Action<object> execute, Predicate<object> canExecute ) {
             this._execute = execute;
             this._canExecute = canExecute;
         }

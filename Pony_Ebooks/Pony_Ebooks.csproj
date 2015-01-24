@@ -164,6 +164,7 @@
     <Compile Include="UserControls\PostPostsView.xaml.cs">
       <DependentUpon>PostPostsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CurrentStatusViewModel.cs" />
     <Compile Include="ViewModels\interfaces\ICommandRowViewModel.cs" />
     <Compile Include="ViewModels\interfaces\ICurrentStatusViewModel.cs" />
     <Compile Include="ViewModels\interfaces\IMainWindowViewModel.cs" />
