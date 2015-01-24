@@ -1,10 +1,10 @@
 ﻿// // ==========================================================================================================
 // // 
-// //  File ID: Pony_Ebooks - Pony_Ebooks - ICommandRowViewModel.cs 
+// //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTweet.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:07 PM, 23/01/2015
-// //  Created Date: 8:38 PM, 23/01/2015
+// //  Last Changed Date: 9:44 PM, 23/01/2015
+// //  Created Date: 9:43 PM, 23/01/2015
 // // 
 // //  Notes:
 // //  
@@ -12,39 +12,32 @@
 
 #region Imported Namespaces
 
-using Pony_Ebooks.Framework;
+using System;
 
 #endregion
 
-namespace Pony_Ebooks {
+namespace Pony_Ebooks.Models {
     ///=================================================================================================
-    /// <summary>   Interface for command row view model. </summary>
+    /// <summary>   Markov tweet. </summary>
     ///
     /// <remarks>   Collin O' Connor, 1/23/2015. </remarks>
     ///=================================================================================================
-    public interface ICommandRowViewModel {
+    public class MarkovTweet {
         #region Properties
 
         ///=================================================================================================
-        /// <summary>   Gets the post chain command. </summary>
+        /// <summary>   Gets or sets the text. </summary>
         ///
-        /// <value> The post chain command. </value>
+        /// <value> The text. </value>
         ///=================================================================================================
-        IRelayCommand PostChainCommand { get; }
+        public string Text { get; set; }
 
         ///=================================================================================================
-        /// <summary>   Gets the new chain command. </summary>
+        /// <summary>   Gets or sets the Date/Time of the time. </summary>
         ///
-        /// <value> The new chain command. </value>
+        /// <value> The time. </value>
         ///=================================================================================================
-        IRelayCommand NewChainCommand { get; }
-
-        ///=================================================================================================
-        /// <summary>   Gets the new time command. </summary>
-        ///
-        /// <value> The new time command. </value>
-        ///=================================================================================================
-        IRelayCommand NewTimeCommand { get; }
+        public DateTime Time { get; set; }
 
         #endregion
     }

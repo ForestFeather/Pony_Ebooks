@@ -5,8 +5,9 @@
         Title="Twitter Markov Generator" Height="350" Width="525"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:UserControls="clr-namespace:Pony_Ebooks.UserControls"
+        xmlns:ViewModels="clr-namespace:Pony_Ebooks.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance d:Type=PonyEbooks:IMainWindowViewModel}">
+        d:DataContext="{d:DesignInstance d:Type=ViewModels:IMainWindowViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -44,28 +45,5 @@
         <Grid Grid.Row="3">
             <UserControls:CommandRowView></UserControls:CommandRowView>
         </Grid>
-        
-        <!--<TextBlock Grid.Row="0" Text="{Binding Path=NextChain}"></TextBlock>
-        <TextBlock Grid.Row="1" Text="{Binding Path=NextTweetTime}"></TextBlock>
-        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
-            <ItemsControl ItemsSource="{Binding Path=PreviousTweets}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Path=Value}"></TextBlock>
-                    </DataTemplate>
-            </ItemsControl.ItemTemplate>
-                </ItemsControl>
-        </ScrollViewer>
-
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Button Margin="5" Click="Generate">Generate New Chain</Button>
-            <Button Margin="5" Click="Post">Post Current Chain</Button>
-        </StackPanel>-->
-        
     </Grid>
 </Window>
