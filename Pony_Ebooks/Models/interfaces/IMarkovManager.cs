@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 #endregion
 
@@ -23,7 +24,7 @@ namespace Pony_Ebooks.Models {
     ///
     /// <remarks>   Collin O' Connor, 1/23/2015. </remarks>
     ///=================================================================================================
-    public interface IMarkovManager {
+    public interface IMarkovManager : INotifyPropertyChanged {
         #region Properties
 
         ///=================================================================================================

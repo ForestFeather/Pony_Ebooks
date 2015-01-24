@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovManager.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 7:21 AM, 24/01/2015
+// //  Last Changed Date: 8:04 AM, 24/01/2015
 // //  Created Date: 9:21 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -14,8 +14,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Pony_Ebooks.Markov;
 
@@ -24,13 +26,16 @@ using log4net;
 #endregion
 
 namespace Pony_Ebooks.Models {
+
     ///=================================================================================================
     /// <summary>   Manager for markovs. </summary>
     ///
     /// <remarks>   Collin O' Connor, 1/23/2015. </remarks>
     ///
     /// <seealso cref="T:Pony_Ebooks.Models.IMarkovManager"/>
+    /// <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
     ///=================================================================================================
+
     public class MarkovManager : IMarkovManager {
         #region Fields and Constants
 
@@ -42,6 +47,12 @@ namespace Pony_Ebooks.Models {
         /// <summary>   Source files. </summary>
         private readonly IDictionary<string, bool> _sourceFiles;
 
+        /// <summary>   The next chain. </summary>
+        private string _nextChain;
+
+        /// <summary>   The previous chain. </summary>
+        private string _previousChain;
+
         #region Constructors
 
         ///=================================================================================================
@@ -51,6 +62,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="sourceFiles">  Source files. </param>
         ///=================================================================================================
+
         public MarkovManager( IDictionary<string, bool> sourceFiles ) {
             this._sourceFiles = sourceFiles;
             _log.Info( "Instantiated Markov Manager with " + this._sourceFiles.Count + " sources." );
@@ -65,6 +77,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The markov chain. </value>
         ///=================================================================================================
+
         protected MarkovChain<string> MarkovChain { get; set; }
 
         #endregion
@@ -78,6 +91,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MinChars"/>
         ///=================================================================================================
+
         public int MinChars { get; set; }
 
         ///=================================================================================================
@@ -87,6 +101,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MaxChars"/>
         ///=================================================================================================
+
         public int MaxChars { get; set; }
 
         ///=================================================================================================
@@ -96,6 +111,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MarkovWeight"/>
         ///=================================================================================================
+
         public int MarkovWeight { get; set; }
 
         ///=================================================================================================
@@ -105,6 +121,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MarkovOrder"/>
         ///=================================================================================================
+
         public int MarkovOrder { get; set; }
 
         ///=================================================================================================
@@ -114,7 +131,14 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.NextChain"/>
         ///=================================================================================================
-        public string NextChain { get; set; }
+
+        public string NextChain {
+            get { return this._nextChain; }
+            set {
+                this._nextChain = value;
+                this.OnPropertyChanged( );
+            }
+        }
 
         ///=================================================================================================
         /// <summary>   Gets or sets the previous chain. </summary>
@@ -123,7 +147,14 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.PreviousChain"/>
         ///=================================================================================================
-        public string PreviousChain { get; set; }
+
+        public string PreviousChain {
+            get { return this._previousChain; }
+            set {
+                this._previousChain = value;
+                this.OnPropertyChanged( );
+            }
+        }
 
         ///=================================================================================================
         /// <summary>   Gets or sets source texts. </summary>
@@ -132,6 +163,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.SourceTexts"/>
         ///=================================================================================================
+
         public IList<Tuple<string, bool, string>> SourceTexts { get; set; }
 
         ///=================================================================================================
@@ -143,6 +175,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.Initialize()"/>
         ///=================================================================================================
+
         public bool Initialize( ) {
             this.SourceTexts = new List<Tuple<string, bool, string>>( );
             this.MinChars = this.MinChars < 1 ? 1 : this.MinChars;
@@ -173,6 +206,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.GenerateNewChain()"/>
         ///=================================================================================================
+
         public string GenerateNewChain( ) {
             int len;
             int count = 0;
@@ -207,6 +241,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.RegenerateSources()"/>
         ///=================================================================================================
+
         public bool RegenerateSources( ) {
             // Wipe current chains
             this.MarkovChain = new MarkovChain<string>( this.MarkovOrder );
@@ -231,6 +266,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.AddSource(string,bool)"/>
         ///=================================================================================================
+
         public bool AddSource( string fileName, bool loadNow ) {
             string text;
             try {
@@ -251,6 +287,13 @@ namespace Pony_Ebooks.Models {
 
         #endregion
 
+        #region INotifyPropertyChanged Members
+
+        /// <summary>   Event queue for all listeners interested in PropertyChanged events. </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
         #region Members
 
         ///=================================================================================================
@@ -260,6 +303,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="text"> The text. </param>
         ///=================================================================================================
+
         private void ParseSourceText( string text ) {
             var wordCount = 0;
             var lines = text.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
@@ -273,6 +317,23 @@ namespace Pony_Ebooks.Models {
             _log.Info(
                 "Added source text to generator composed of " + lines.Length + " lines with a total of " + wordCount +
                 " word tokens." );
+        }
+
+        ///=================================================================================================
+        /// <summary>   Executes the property changed action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
+        ///
+        /// <param name="propertyName"> (Optional) name of the property. </param>
+        ///=================================================================================================
+
+        protected virtual void OnPropertyChanged( [ CallerMemberName ] string propertyName = null ) {
+            var handler = this.PropertyChanged;
+            if( handler == null ) {
+                return;
+            }
+            var args = new PropertyChangedEventArgs( propertyName );
+            handler( this, args );
         }
 
         #endregion
