@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovManager.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:51 AM, 24/01/2015
+// //  Last Changed Date: 7:21 AM, 24/01/2015
 // //  Created Date: 9:21 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -14,8 +14,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 using Pony_Ebooks.Markov;
+
+using log4net;
 
 #endregion
 
@@ -28,9 +32,15 @@ namespace Pony_Ebooks.Models {
     /// <seealso cref="T:Pony_Ebooks.Models.IMarkovManager"/>
     ///=================================================================================================
     public class MarkovManager : IMarkovManager {
+        #region Fields and Constants
+
+        /// <summary>   The log. </summary>
+        private static readonly ILog _log = LogManager.GetLogger( typeof( MarkovManager ) );
+
+        #endregion
 
         /// <summary>   Source files. </summary>
-        private IDictionary<string, bool> _sourceFiles;
+        private readonly IDictionary<string, bool> _sourceFiles;
 
         #region Constructors
 
@@ -43,6 +53,7 @@ namespace Pony_Ebooks.Models {
         ///=================================================================================================
         public MarkovManager( IDictionary<string, bool> sourceFiles ) {
             this._sourceFiles = sourceFiles;
+            _log.Info( "Instantiated Markov Manager with " + this._sourceFiles.Count + " sources." );
         }
 
         #endregion
@@ -115,7 +126,7 @@ namespace Pony_Ebooks.Models {
         public string PreviousChain { get; set; }
 
         ///=================================================================================================
-        /// <summary>   Gets source texts. </summary>
+        /// <summary>   Gets or sets source texts. </summary>
         ///
         /// <value> The source texts. </value>
         ///
@@ -133,6 +144,23 @@ namespace Pony_Ebooks.Models {
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.Initialize()"/>
         ///=================================================================================================
         public bool Initialize( ) {
+            this.SourceTexts = new List<Tuple<string, bool, string>>( );
+            this.MinChars = this.MinChars < 1 ? 1 : this.MinChars;
+            this.MaxChars = this.MaxChars < this.MinChars ? this.MinChars + 1 : this.MaxChars;
+            this.MarkovOrder = this.MarkovOrder == 0 ? 1 : this.MarkovOrder;
+
+            _log.Debug( "Markov n-gram order set to " + this.MarkovOrder + "." );
+            this.MarkovChain = new MarkovChain<string>( this.MarkovOrder );
+
+            foreach( var sourceFile in this._sourceFiles ) {
+                this.AddSource( sourceFile.Key, sourceFile.Value );
+            }
+
+            // Preload a chain and return if we can
+            if( this.SourceTexts.Count == 0 ) {
+                return false;
+            }
+            this.NextChain = this.GenerateNewChain( );
             return true;
         }
 
@@ -146,7 +174,28 @@ namespace Pony_Ebooks.Models {
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.GenerateNewChain()"/>
         ///=================================================================================================
         public string GenerateNewChain( ) {
-            return string.Empty;
+            int len;
+            int count = 0;
+            string output;
+
+            do {
+                var words = this.MarkovChain.Chain( ).ToList( );
+                output = string.Empty;
+                for( int i = 0; i < words.Count; i++ ) {
+                    output += words[ i ] + ( i == words.Count - 1 ? "" : " " );
+                }
+
+                len = output.ToCharArray( ).Length;
+                count++;
+            } while( len >= this.MaxChars ||
+                     len <= this.MinChars );
+
+            _log.Info( "Generated valid chain in " + count + " tries." );
+
+            this.PreviousChain = this.NextChain;
+            this.NextChain = output;
+
+            return output;
         }
 
         ///=================================================================================================
@@ -159,7 +208,15 @@ namespace Pony_Ebooks.Models {
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.RegenerateSources()"/>
         ///=================================================================================================
         public bool RegenerateSources( ) {
-            return true;
+            // Wipe current chains
+            this.MarkovChain = new MarkovChain<string>( this.MarkovOrder );
+
+            // Regen all items
+            foreach( var sourceFile in this.SourceTexts ) {
+                this.AddSource( sourceFile.Item1, sourceFile.Item2 );
+            }
+
+            return this.SourceTexts.Count == 0;
         }
 
         ///=================================================================================================
@@ -175,8 +232,47 @@ namespace Pony_Ebooks.Models {
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.AddSource(string,bool)"/>
         ///=================================================================================================
         public bool AddSource( string fileName, bool loadNow ) {
-            
+            string text;
+            try {
+                // try to load text for inclusion in SourceTexts
+                text = File.ReadAllText( fileName );
+            } catch( Exception e ) {
+                _log.Error( "Unable to load source file " + fileName + ", caught exception: ", e );
+                return false;
+            }
+
+            // Get into the source texts
+            this.SourceTexts.Add( new Tuple<string, bool, string>( fileName, loadNow, text ) );
+            if( loadNow ) {
+                this.ParseSourceText( text );
+            }
             return true;
+        }
+
+        #endregion
+
+        #region Members
+
+        ///=================================================================================================
+        /// <summary>   Parse source text. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
+        ///
+        /// <param name="text"> The text. </param>
+        ///=================================================================================================
+        private void ParseSourceText( string text ) {
+            var wordCount = 0;
+            var lines = text.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
+
+            // Split each sentence and add to Markov system
+            foreach( var words in lines.Select( line => line.Split( new[] { " " }, StringSplitOptions.None ) ) ) {
+                this.MarkovChain.Add( words );
+                wordCount += words.Length;
+            }
+
+            _log.Info(
+                "Added source text to generator composed of " + lines.Length + " lines with a total of " + wordCount +
+                " word tokens." );
         }
 
         #endregion

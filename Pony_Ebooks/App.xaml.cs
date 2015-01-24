@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - App.xaml.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:00 PM, 21/01/2015
+// //  Last Changed Date: 6:25 AM, 24/01/2015
 // //  Created Date: 7:10 PM, 18/01/2015
 // // 
 // //  Notes:
@@ -13,6 +13,7 @@
 #region Imported Namespaces
 
 using System;
+using System.IO;
 using System.Windows;
 
 using Pony_Ebooks.Properties;
@@ -34,11 +35,18 @@ namespace Pony_Ebooks {
     /// <seealso cref="T:System.Windows.Application"/>
     ///=================================================================================================
     public partial class App : Application {
-        #region Members
+        #region Fields and Constants
 
-        // Define a static logger variable so that it references the
-        // Logger instance named "MyApp".
-        private static readonly ILog _log = LogManager.GetLogger(typeof(App));
+        ///=================================================================================================
+        /// <summary>
+        ///     Define a static logger variable so that it references the Logger instance named "MyApp".
+        /// </summary>
+        ///=================================================================================================
+        private static readonly ILog _log = LogManager.GetLogger( typeof( App ) );
+
+        #endregion
+
+        #region Members
 
         ///=================================================================================================
         /// <summary>   Event handler. Called by App for on startup events. </summary>
@@ -49,9 +57,7 @@ namespace Pony_Ebooks {
         /// <param name="e">        Startup event information. </param>
         ///=================================================================================================
         private void App_OnStartup( object sender, StartupEventArgs e ) {
-
-
-            InitLogger( );
+            this.InitLogger( );
 
             var credentials = this.InitTwitter( );
             if( credentials == null ) {
@@ -61,12 +67,17 @@ namespace Pony_Ebooks {
             Console.WriteLine( "So we got credentials, whoo!  Let's go kiddies." );
         }
 
+        ///=================================================================================================
+        /// <summary>   Initialises the logger. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
+        ///=================================================================================================
         private void InitLogger( ) {
             // Set up a simple configuration that logs on the console.
-            BasicConfigurator.Configure();
-            XmlConfigurator.Configure(new System.IO.FileInfo("log4net.xml"));
+            BasicConfigurator.Configure( );
+            XmlConfigurator.Configure( new FileInfo( "log4net.xml" ) );
 
-            _log.Info("Entering application.");
+            _log.Info( "Entering application." );
         }
 
         ///=================================================================================================
