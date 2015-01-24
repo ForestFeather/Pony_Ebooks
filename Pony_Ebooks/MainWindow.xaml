@@ -33,7 +33,7 @@
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
-            <UserControls:CurrentStatusView />
+            <UserControls:CurrentStatusView DataContext="{Binding Path=CurrentStatusViewModel}" />
         </Grid>
         <TabControl Grid.Row="2" ItemsSource="{Binding Path=TabViewModels}">
             <TabControl.ItemTemplate>
@@ -43,7 +43,7 @@
             </TabControl.ItemTemplate>
         </TabControl>
         <Grid Grid.Row="3">
-            <UserControls:CommandRowView></UserControls:CommandRowView>
+            <UserControls:CommandRowView DataContext="{Binding Path=CommandRowViewModel}" />
         </Grid>
     </Grid>
 </Window>

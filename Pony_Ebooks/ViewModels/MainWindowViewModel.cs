@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:00 PM, 21/01/2015
-// //  Created Date: 5:29 AM, 21/01/2015
+// //  Last Changed Date: 10:02 AM, 24/01/2015
+// //  Created Date: 8:12 PM, 23/01/2015
 // // 
 // //  Notes:
 // //  
@@ -12,288 +12,115 @@
 
 #region Imported Namespaces
 
-using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
 
-using Pony_Ebooks.Markov;
-
-using Tweetinvi;
+using Pony_Ebooks.Framework;
+using Pony_Ebooks.Models;
 
 #endregion
 
-namespace Pony_Ebooks {
+namespace Pony_Ebooks.ViewModels {
     ///=================================================================================================
     /// <summary>   Main window view model. </summary>
     ///
     /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
     ///
+    /// <seealso cref="T:Pony_Ebooks.ViewModels.IMainWindowViewModel"/>
     /// <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
     ///=================================================================================================
-    public class MainWindowViewModel : INotifyPropertyChanged {
-
-        /// <summary>   The next chain. </summary>
-        private string _nextChain;
-
-        /// <summary>   Time of the next tweet. </summary>
-        private string _nextTweetTime;
-
-        #region Properties
+    public class MainWindowViewModel : IMainWindowViewModel {
+        #region IMainWindowViewModel Members
 
         ///=================================================================================================
-        /// <summary>   Gets or sets the next chain. </summary>
+        /// <summary>   Gets or sets the current status view model. </summary>
         ///
-        /// <value> The next chain. </value>
-        ///=================================================================================================
-        public string NextChain {
-            get { return this._nextChain; }
-            set {
-                this._nextChain = value;
-                this.OnPropertyChanged( );
-            }
-        }
-
-        ///=================================================================================================
-        /// <summary>   Gets or sets the markov generator. </summary>
+        /// <value> The current status view model. </value>
         ///
-        /// <value> The markov generator. </value>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.CurrentStatusViewModel"/>
         ///=================================================================================================
-        public MarkovChain<string> MarkovGenerator { get; set; }
+        public ICurrentStatusViewModel CurrentStatusViewModel { get; private set; }
 
         ///=================================================================================================
-        /// <summary>   Gets or sets source text. </summary>
+        /// <summary>   Gets or sets the command row view model. </summary>
         ///
-        /// <value> The source text. </value>
-        ///=================================================================================================
-        public string SourceText { get; set; }
-
-        ///=================================================================================================
-        /// <summary>   Gets or sets the filename of the source text file. </summary>
+        /// <value> The command row view model. </value>
         ///
-        /// <value> The filename of the source text file. </value>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.CommandRowViewModel"/>
         ///=================================================================================================
-        public string SourceTextFileName { get; set; }
+        public ICommandRowViewModel CommandRowViewModel { get; private set; }
 
         ///=================================================================================================
-        /// <summary>   Gets or sets the previous tweets. </summary>
+        /// <summary>   Gets or sets the manager for tweet. </summary>
         ///
-        /// <value> The previous tweets. </value>
-        ///=================================================================================================
-        public ObservableCollection<StringObject> PreviousTweets { get; set; }
-
-        ///=================================================================================================
-        /// <summary>   Gets or sets the post timer. </summary>
+        /// <value> The tweet manager. </value>
         ///
-        /// <value> The post timer. </value>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.TweetManager"/>
         ///=================================================================================================
-        public Timer PostTimer { get; set; }
+        public ITweetManager TweetManager { get; private set; }
 
         ///=================================================================================================
-        /// <summary>   Gets or sets the random generator. </summary>
+        /// <summary>   Gets or sets the tab view models. </summary>
         ///
-        /// <value> The random generator. </value>
-        ///=================================================================================================
-        public Random RandomGenerator { get; set; }
-
-        ///=================================================================================================
-        /// <summary>   Gets or sets the time of the next tweet. </summary>
+        /// <value> The tab view models. </value>
         ///
-        /// <value> The time of the next tweet. </value>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.TabViewModels"/>
         ///=================================================================================================
-        public string NextTweetTime {
-            get { return this._nextTweetTime; }
-            set {
-                this._nextTweetTime = value;
-                this.OnPropertyChanged( );
-            }
-        }
+        public ObservableCollection<ITabViewModel> TabViewModels { get; private set; }
 
-        #endregion
+        ///=================================================================================================
+        /// <summary>   Gets or sets the manager for markov. </summary>
+        ///
+        /// <value> The markov manager. </value>
+        ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.MarkovManager"/>
+        ///=================================================================================================
+        public IMarkovManager MarkovManager { get; private set; }
 
-        #region INotifyPropertyChanged Members
-
-        /// <summary>   Occurs when a property value changes. </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
-
-        #region Members
+        ///=================================================================================================
+        /// <summary>   Gets or sets the timer control. </summary>
+        ///
+        /// <value> The timer control. </value>
+        ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.TimerControl"/>
+        ///=================================================================================================
+        public ITimerControl TimerControl { get; private set; }
 
         ///=================================================================================================
         /// <summary>   Initializes this object. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
+        /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
+        ///
+        /// <seealso cref="M:Pony_Ebooks.ViewModels.IMainWindowViewModel.Initialize()"/>
         ///=================================================================================================
         public bool Initialize( ) {
-            return this.InitVars( ) && this.InitMarkov( ) && this.InitTimer( );
+            var files = new Dictionary<string, bool> { { "S1.txt", true } };
+
+            this.MarkovManager = new MarkovManager( files )
+                                     {
+                                         MarkovOrder = 1,
+                                         MarkovWeight = 1,
+                                         MinChars = 16,
+                                         MaxChars = 128
+                                     };
+            this.TimerControl = new TimerControl( ) { MinSeconds = 300, MaxSeconds = 10800 };
+            this.TweetManager = new TweetManager( );
+            this.CurrentStatusViewModel = new CurrentStatusViewModel( this.MarkovManager, this.TimerControl );
+            this.CommandRowViewModel = new CommandRowViewModel(
+                this.TimerControl, this.MarkovManager, this.TweetManager );
+            this.TabViewModels = new ObservableCollection<ITabViewModel>( )
+                                     {
+                                         new TabViewModel( )
+                                             {
+                                                 Title =
+                                                     "Placeholder"
+                                             }
+                                     };
+
+            return this.MarkovManager.Initialize( ) && this.TimerControl.Initialize( );
         }
-
-        ///=================================================================================================
-        /// <summary>   Initialises the variables. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <returns>   true if it succeeds, false if it fails. </returns>
-        ///=================================================================================================
-        private bool InitVars( ) {
-            this.RandomGenerator = new Random( );
-            this.SourceTextFileName = "S1.txt";
-            this.PreviousTweets = new ObservableCollection<StringObject>( );
-
-            return true;
-        }
-
-        ///=================================================================================================
-        /// <summary>   Initialises the timer. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <returns>   true if it succeeds, false if it fails. </returns>
-        ///=================================================================================================
-        private bool InitTimer( ) {
-            this.PostTimer = new Timer( this.TimerCallbackMethod, null, new TimeSpan( 0, 5, 0 ), new TimeSpan( ) );
-
-            return true;
-        }
-
-        ///=================================================================================================
-        /// <summary>   Timer callback method. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <param name="state">    The state. </param>
-        ///=================================================================================================
-        private void TimerCallbackMethod( object state ) {
-            this.PublishTweet( );
-
-            this.GenerateNewChainAndTime( );
-        }
-
-        ///=================================================================================================
-        /// <summary>   Publish tweet. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///=================================================================================================
-        public void PublishTweet( ) {
-            // Post Markov's NextChain
-            Tweet.PublishTweet( this.NextChain );
-            var s = string.Format(
-                "{0} {1}", this.NextChain, DateTime.Now.ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" ) );
-            Console.WriteLine( s );
-            this.PreviousTweets.Insert( 0, new StringObject { Value = s } );
-        }
-
-        ///=================================================================================================
-        /// <summary>   Generates a new chain and time. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///=================================================================================================
-        public void GenerateNewChainAndTime( ) {
-            // Generate Markov to fit twitter length
-            var next = this.GenerateTwitterMarkov( );
-
-            // Set Markov
-            this.NextChain = next;
-            Console.WriteLine( next );
-
-            // Update the timer
-            var hours = this.RandomGenerator.Next( 1, 2 );
-            var minutes = this.RandomGenerator.Next( 0, 59 );
-            var seconds = this.RandomGenerator.Next( 0, 59 );
-            var timeSpan = new TimeSpan( hours, minutes, seconds );
-            this.NextTweetTime = ( DateTime.Now + timeSpan ).ToString( "MM'/'dd'/'yyyy HH':'mm':'ss.fff" );
-            this.PostTimer.Change( timeSpan, new TimeSpan( ) );
-        }
-
-        ///=================================================================================================
-        /// <summary>   Initialises the markov. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <returns>   true if it succeeds, false if it fails. </returns>
-        ///=================================================================================================
-        private bool InitMarkov( ) {
-            this.SourceText = File.ReadAllText( this.SourceTextFileName );
-            this.MarkovGenerator = new MarkovChain<string>( 1 );
-
-            if( string.IsNullOrEmpty( this.SourceText ) ) {
-                Console.WriteLine( "No text in generator file to load!" );
-                return false;
-            }
-
-            string[] lines = this.SourceText.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
-
-            foreach( var line in lines ) {
-                var words = line.Split( new[] { " " }, StringSplitOptions.None );
-                this.MarkovGenerator.Add( words );
-            }
-
-            this.NextChain = this.GenerateTwitterMarkov( );
-
-            return true;
-        }
-
-        ///=================================================================================================
-        /// <summary>   Generates a twitter markov. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <returns>   The twitter markov. </returns>
-        ///=================================================================================================
-        private string GenerateTwitterMarkov( ) {
-            int len = 0;
-            string output;
-            do {
-                var words = this.MarkovGenerator.Chain( ).ToList( );
-                output = string.Empty;
-                for( int i = 0; i < words.Count; i++ ) {
-                    output += words[ i ] + ( i == words.Count - 1 ? "" : " " );
-                }
-
-                len = output.ToCharArray( ).Length;
-            } while( len >= 120 ||
-                     len <= 12 );
-
-            return output;
-        }
-
-        ///=================================================================================================
-        /// <summary>   Executes the property changed action. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <param name="propertyName"> (Optional) name of the property. </param>
-        ///=================================================================================================
-        protected virtual void OnPropertyChanged( [ CallerMemberName ] string propertyName = null ) {
-            var handler = this.PropertyChanged;
-            if( handler != null ) {
-                handler( this, new PropertyChangedEventArgs( propertyName ) );
-            }
-        }
-
-        #endregion
-    }
-
-    ///=================================================================================================
-    /// <summary>   String object. </summary>
-    ///
-    /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-    ///=================================================================================================
-    public class StringObject {
-        #region Properties
-
-        ///=================================================================================================
-        /// <summary>   Gets or sets the value. </summary>
-        ///
-        /// <value> The value. </value>
-        ///=================================================================================================
-        public string Value { get; set; }
 
         #endregion
     }

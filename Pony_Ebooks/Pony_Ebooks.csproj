@@ -125,9 +125,11 @@
     <Compile Include="Framework\ViewModel.cs" />
     <Compile Include="Models\interfaces\IMarkovManager.cs" />
     <Compile Include="Models\interfaces\ITimerControl.cs" />
+    <Compile Include="Models\interfaces\ITweetManager.cs" />
     <Compile Include="Models\MarkovManager.cs" />
     <Compile Include="Models\MarkovTweet.cs" />
     <Compile Include="Models\TimerControl.cs" />
+    <Compile Include="Models\TweetManager.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UserControls\CommandRowView.xaml.cs">
       <DependentUpon>CommandRowView.xaml</DependentUpon>
@@ -164,6 +166,7 @@
     <Compile Include="UserControls\PostPostsView.xaml.cs">
       <DependentUpon>PostPostsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CommandRowViewModel.cs" />
     <Compile Include="ViewModels\CurrentStatusViewModel.cs" />
     <Compile Include="ViewModels\interfaces\ICommandRowViewModel.cs" />
     <Compile Include="ViewModels\interfaces\ICurrentStatusViewModel.cs" />

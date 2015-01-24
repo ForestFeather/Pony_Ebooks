@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - IMainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:36 AM, 24/01/2015
+// //  Last Changed Date: 9:56 AM, 24/01/2015
 // //  Created Date: 8:37 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -41,6 +41,13 @@ namespace Pony_Ebooks.ViewModels {
         /// <value> The command row view model. </value>
         ///=================================================================================================
         ICommandRowViewModel CommandRowViewModel { get; }
+
+        ///=================================================================================================
+        /// <summary>   Gets the manager for tweet. </summary>
+        ///
+        /// <value> The tweet manager. </value>
+        ///=================================================================================================
+        ITweetManager TweetManager { get; }
 
         ///=================================================================================================
         /// <summary>   Gets the tab view models. </summary>

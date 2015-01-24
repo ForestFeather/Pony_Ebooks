@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindow.xaml.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:00 PM, 21/01/2015
+// //  Last Changed Date: 8:40 AM, 24/01/2015
 // //  Created Date: 7:10 PM, 18/01/2015
 // // 
 // //  Notes:
@@ -13,6 +13,8 @@
 #region Imported Namespaces
 
 using System.Windows;
+
+using Pony_Ebooks.ViewModels;
 
 #endregion
 
@@ -49,34 +51,6 @@ namespace Pony_Ebooks {
         /// <value> The view model. </value>
         ///=================================================================================================
         public MainWindowViewModel ViewModel { get; set; }
-
-        #endregion
-
-        #region Members
-
-        ///=================================================================================================
-        /// <summary>   Generates. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <param name="sender">   Source of the event. </param>
-        /// <param name="e">        Routed event information. </param>
-        ///=================================================================================================
-        private void Generate( object sender, RoutedEventArgs e ) {
-            this.ViewModel.GenerateNewChainAndTime( );
-        }
-
-        ///=================================================================================================
-        /// <summary>   Post this message. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
-        ///
-        /// <param name="sender">   Source of the event. </param>
-        /// <param name="e">        Routed event information. </param>
-        ///=================================================================================================
-        private void Post( object sender, RoutedEventArgs e ) {
-            this.ViewModel.PublishTweet( );
-        }
 
         #endregion
     }
