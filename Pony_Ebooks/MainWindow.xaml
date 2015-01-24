@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:PonyEbooks="clr-namespace:Pony_Ebooks"
         Title="MainWindow" Height="350" Width="525"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:UserControls="clr-namespace:Pony_Ebooks.UserControls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance d:Type=PonyEbooks:MainWindowViewModel}">
     <Grid>
@@ -13,7 +14,32 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding Path=NextChain}"></TextBlock>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open Source Text"></MenuItem>
+                <MenuItem Header="_Settings"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="_Exit"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Commands">
+                <MenuItem Header="_Post Chain"></MenuItem>
+                <MenuItem Header="_Time Regeneration"></MenuItem>
+                <MenuItem Header="_Chain_Regeneration"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Help Contents"></MenuItem>
+                <MenuItem Header="_About"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <UserControls:CurrentStatusView />
+        </Grid>
+        <TabControl Grid.Row="2" ItemsSource="{Binding Path=TabViewModels}"></TabControl>
+        <Grid Grid.Row="3">
+            <UserControls:CommandRowView></UserControls:CommandRowView>
+        </Grid>
+        
+        <!--<TextBlock Grid.Row="0" Text="{Binding Path=NextChain}"></TextBlock>
         <TextBlock Grid.Row="1" Text="{Binding Path=NextTweetTime}"></TextBlock>
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
             <ItemsControl ItemsSource="{Binding Path=PreviousTweets}">
@@ -33,7 +59,7 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <Button Margin="5" Click="Generate">Generate New Chain</Button>
             <Button Margin="5" Click="Post">Post Current Chain</Button>
-        </StackPanel>
+        </StackPanel>-->
         
     </Grid>
 </Window>
