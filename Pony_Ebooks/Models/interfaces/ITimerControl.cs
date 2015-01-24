@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - ITimerControl.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:32 AM, 24/01/2015
-// //  Created Date: 9:47 PM, 23/01/2015
+// //  Last Changed Date: 7:43 AM, 24/01/2015
+// //  Created Date: 5:33 AM, 24/01/2015
 // // 
 // //  Notes:
 // //  
@@ -13,6 +13,7 @@
 #region Imported Namespaces
 
 using System;
+using System.ComponentModel;
 
 #endregion
 
@@ -22,7 +23,7 @@ namespace Pony_Ebooks.Models {
     ///
     /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
     ///=================================================================================================
-    public interface ITimerControl {
+    public interface ITimerControl : INotifyPropertyChanged {
         #region Properties
 
         ///=================================================================================================
@@ -52,6 +53,13 @@ namespace Pony_Ebooks.Models {
         /// <value> The maximum seconds. </value>
         ///=================================================================================================
         int MaxSeconds { get; set; }
+
+        ///=================================================================================================
+        /// <summary>   Gets or sets the timer event. </summary>
+        ///
+        /// <value> The timer event. </value>
+        ///=================================================================================================
+        Action<object> TimerEvent { get; set; }
 
         #endregion
 

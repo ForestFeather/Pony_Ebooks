@@ -127,6 +127,8 @@
     <Compile Include="Models\interfaces\ITimerControl.cs" />
     <Compile Include="Models\MarkovManager.cs" />
     <Compile Include="Models\MarkovTweet.cs" />
+    <Compile Include="Models\TimerControl.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UserControls\CommandRowView.xaml.cs">
       <DependentUpon>CommandRowView.xaml</DependentUpon>
     </Compile>
