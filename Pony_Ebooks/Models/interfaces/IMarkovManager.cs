@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - IMarkovManager.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:42 PM, 23/01/2015
-// //  Created Date: 9:42 PM, 23/01/2015
+// //  Last Changed Date: 5:47 AM, 24/01/2015
+// //  Created Date: 5:33 AM, 24/01/2015
 // // 
 // //  Notes:
 // //  
@@ -99,6 +99,16 @@ namespace Pony_Ebooks.Models {
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///=================================================================================================
         bool RegenerateSources( );
+
+        ///=================================================================================================
+        /// <summary>   Adds a source to 'loadNow'. </summary>
+        ///
+        /// <param name="fileName"> Filename of the file. </param>
+        /// <param name="loadNow">  true to load now. </param>
+        ///
+        /// <returns>   true if it succeeds, false if it fails. </returns>
+        ///=================================================================================================
+        bool AddSource( string fileName, bool loadNow );
 
         #endregion
     }

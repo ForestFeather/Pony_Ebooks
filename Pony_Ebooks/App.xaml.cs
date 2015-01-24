@@ -20,6 +20,9 @@ using Pony_Ebooks.Properties;
 using Tweetinvi;
 using Tweetinvi.Core.Interfaces.oAuth;
 
+using log4net;
+using log4net.Config;
+
 #endregion
 
 namespace Pony_Ebooks {
@@ -33,6 +36,10 @@ namespace Pony_Ebooks {
     public partial class App : Application {
         #region Members
 
+        // Define a static logger variable so that it references the
+        // Logger instance named "MyApp".
+        private static readonly ILog _log = LogManager.GetLogger(typeof(App));
+
         ///=================================================================================================
         /// <summary>   Event handler. Called by App for on startup events. </summary>
         ///
@@ -42,12 +49,24 @@ namespace Pony_Ebooks {
         /// <param name="e">        Startup event information. </param>
         ///=================================================================================================
         private void App_OnStartup( object sender, StartupEventArgs e ) {
+
+
+            InitLogger( );
+
             var credentials = this.InitTwitter( );
             if( credentials == null ) {
                 this.EndProgram( "Unable to get valid credentials.  Goodbye!" );
             }
 
             Console.WriteLine( "So we got credentials, whoo!  Let's go kiddies." );
+        }
+
+        private void InitLogger( ) {
+            // Set up a simple configuration that logs on the console.
+            BasicConfigurator.Configure();
+            XmlConfigurator.Configure(new System.IO.FileInfo("log4net.xml"));
+
+            _log.Info("Entering application.");
         }
 
         ///=================================================================================================

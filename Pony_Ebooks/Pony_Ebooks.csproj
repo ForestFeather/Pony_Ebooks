@@ -55,6 +55,9 @@
     <Reference Include="Autofac">
       <HintPath>packages\Autofac.3.3.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>packages\Microsoft.Bcl.Async.1.0.165\lib\net45\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -120,6 +123,10 @@
     <Compile Include="Framework\RelayCommand.cs" />
     <Compile Include="Framework\TabViewModel.cs" />
     <Compile Include="Framework\ViewModel.cs" />
+    <Compile Include="Models\interfaces\IMarkovManager.cs" />
+    <Compile Include="Models\interfaces\ITimerControl.cs" />
+    <Compile Include="Models\MarkovManager.cs" />
+    <Compile Include="Models\MarkovTweet.cs" />
     <Compile Include="UserControls\CommandRowView.xaml.cs">
       <DependentUpon>CommandRowView.xaml</DependentUpon>
     </Compile>
@@ -146,8 +153,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\PostPostsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControls\PostPostsView.xaml.cs">
+      <DependentUpon>PostPostsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\interfaces\ICommandRowViewModel.cs" />
     <Compile Include="ViewModels\interfaces\ICurrentStatusViewModel.cs" />
     <Compile Include="ViewModels\interfaces\IMainWindowViewModel.cs" />
@@ -201,7 +215,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="log4net.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

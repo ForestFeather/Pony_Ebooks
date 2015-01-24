@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovManager.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:45 PM, 23/01/2015
+// //  Last Changed Date: 5:51 AM, 24/01/2015
 // //  Created Date: 9:21 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -28,6 +28,25 @@ namespace Pony_Ebooks.Models {
     /// <seealso cref="T:Pony_Ebooks.Models.IMarkovManager"/>
     ///=================================================================================================
     public class MarkovManager : IMarkovManager {
+
+        /// <summary>   Source files. </summary>
+        private IDictionary<string, bool> _sourceFiles;
+
+        #region Constructors
+
+        ///=================================================================================================
+        /// <summary>   Constructor. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
+        ///
+        /// <param name="sourceFiles">  Source files. </param>
+        ///=================================================================================================
+        public MarkovManager( IDictionary<string, bool> sourceFiles ) {
+            this._sourceFiles = sourceFiles;
+        }
+
+        #endregion
+
         #region Properties
 
         ///=================================================================================================
@@ -96,7 +115,7 @@ namespace Pony_Ebooks.Models {
         public string PreviousChain { get; set; }
 
         ///=================================================================================================
-        /// <summary>   Gets or sets source texts. </summary>
+        /// <summary>   Gets source texts. </summary>
         ///
         /// <value> The source texts. </value>
         ///
@@ -140,6 +159,23 @@ namespace Pony_Ebooks.Models {
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.RegenerateSources()"/>
         ///=================================================================================================
         public bool RegenerateSources( ) {
+            return true;
+        }
+
+        ///=================================================================================================
+        /// <summary>   Adds a source to 'loadNow'. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
+        ///
+        /// <param name="fileName"> Filename of the file. </param>
+        /// <param name="loadNow">  true to load now. </param>
+        ///
+        /// <returns>   true if it succeeds, false if it fails. </returns>
+        ///
+        /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.AddSource(string,bool)"/>
+        ///=================================================================================================
+        public bool AddSource( string fileName, bool loadNow ) {
+            
             return true;
         }
 
