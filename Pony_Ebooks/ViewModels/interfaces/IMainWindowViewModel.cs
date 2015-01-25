@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - IMainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:56 AM, 24/01/2015
+// //  Last Changed Date: 6:57 AM, 25/01/2015
 // //  Created Date: 8:37 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -55,6 +55,13 @@ namespace Pony_Ebooks.ViewModels {
         /// <value> The tab view models. </value>
         ///=================================================================================================
         ObservableCollection<ITabViewModel> TabViewModels { get; }
+
+        ///=================================================================================================
+        /// <summary>   Gets or sets the selected tab. </summary>
+        ///
+        /// <value> The selected tab. </value>
+        ///=================================================================================================
+        ITabViewModel SelectedTab { get; set; }
 
         ///=================================================================================================
         /// <summary>   Gets the manager for markov. </summary>

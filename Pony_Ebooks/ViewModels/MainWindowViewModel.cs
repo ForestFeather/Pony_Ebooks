@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:29 AM, 25/01/2015
+// //  Last Changed Date: 6:58 AM, 25/01/2015
 // //  Created Date: 8:12 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -26,10 +26,15 @@ namespace Pony_Ebooks.ViewModels {
     ///
     /// <remarks>   Collin O' Connor, 1/21/2015. </remarks>
     ///
+    /// <seealso cref="T:Pony_Ebooks.Framework.ViewModel"/>
     /// <seealso cref="T:Pony_Ebooks.ViewModels.IMainWindowViewModel"/>
     /// <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
     ///=================================================================================================
-    public class MainWindowViewModel : IMainWindowViewModel {
+    public class MainWindowViewModel : ViewModel, IMainWindowViewModel {
+
+        /// <summary>   The selected tab. </summary>
+        private ITabViewModel _selectedTab;
+
         #region IMainWindowViewModel Members
 
         ///=================================================================================================
@@ -67,6 +72,21 @@ namespace Pony_Ebooks.ViewModels {
         /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.TabViewModels"/>
         ///=================================================================================================
         public ObservableCollection<ITabViewModel> TabViewModels { get; private set; }
+
+        ///=================================================================================================
+        /// <summary>   Gets or sets the selected tab. </summary>
+        ///
+        /// <value> The selected tab. </value>
+        ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMainWindowViewModel.SelectedTab"/>
+        ///=================================================================================================
+        public ITabViewModel SelectedTab {
+            get { return this._selectedTab; }
+            set {
+                this._selectedTab = value;
+                this.OnPropertyChanged( );
+            }
+        }
 
         ///=================================================================================================
         /// <summary>   Gets or sets the manager for markov. </summary>

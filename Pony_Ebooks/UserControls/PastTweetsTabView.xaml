@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Pony_Ebooks.UserControls.PastTweetsTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ViewModels="clr-namespace:Pony_Ebooks.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance d:Type=ViewModels:IPastTweetsTabViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" FontSize="16" FontWeight="Bold">
+            <TextBlock TextDecorations="Underline">Past Tweets</TextBlock>
+        </Label>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Path=PastTweets}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Margin="5">Tweet:</Label>
+                            <Label Grid.Row="1" Grid.Column="0" Margin="5">Time:</Label>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=Text}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Path=Time}" />
+                            <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0 0 0 1"
+                                    BorderBrush="DimGray" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

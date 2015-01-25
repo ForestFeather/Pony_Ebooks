@@ -39,8 +39,7 @@ namespace Pony_Ebooks.Models {
         /// <seealso cref="M:Pony_Ebooks.Models.ITweetManager.Post(string)"/>
         ///=================================================================================================
         public bool Post( string text ) {
-            // UNCOMMENT ME WHEN DONE TESTING
-            //Tweet.PublishTweet( text );
+            Tweet.PublishTweet( text );
             return true;
         }
 
