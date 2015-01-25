@@ -55,6 +55,9 @@
     <Reference Include="Autofac">
       <HintPath>packages\Autofac.3.3.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>packages\Microsoft.Bcl.Async.1.0.165\lib\net45\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -114,6 +117,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Framework\interfaces\IRelayCommand.cs" />
+    <Compile Include="Framework\interfaces\ITabViewModel.cs" />
+    <Compile Include="Framework\interfaces\IViewModel.cs" />
+    <Compile Include="Framework\RelayCommand.cs" />
+    <Compile Include="Framework\TabViewModel.cs" />
+    <Compile Include="Framework\ViewModel.cs" />
+    <Compile Include="Models\interfaces\IMarkovManager.cs" />
+    <Compile Include="Models\interfaces\ITimerControl.cs" />
+    <Compile Include="Models\interfaces\ITweetManager.cs" />
+    <Compile Include="Models\MarkovManager.cs" />
+    <Compile Include="Models\MarkovTweet.cs" />
+    <Compile Include="Models\TimerControl.cs" />
+    <Compile Include="Models\TweetManager.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="UserControls\CommandRowView.xaml.cs">
+      <DependentUpon>CommandRowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CurrentStatusView.xaml.cs">
+      <DependentUpon>CurrentStatusView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PastTweetsTabView.xaml.cs">
+      <DependentUpon>PastTweetsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\interfaces\IPastTweetsTabViewModel.cs" />
+    <Compile Include="ViewModels\PastTweetsTabViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -126,9 +154,33 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\CommandRowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CurrentStatusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PastTweetsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PostPostsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="UserControls\PostPostsView.xaml.cs">
+      <DependentUpon>PostPostsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\CommandRowViewModel.cs" />
+    <Compile Include="ViewModels\CurrentStatusViewModel.cs" />
+    <Compile Include="ViewModels\interfaces\ICommandRowViewModel.cs" />
+    <Compile Include="ViewModels\interfaces\ICurrentStatusViewModel.cs" />
+    <Compile Include="ViewModels\interfaces\IMainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Markov\ChainState.cs" />
     <Compile Include="Markov\IRandom.cs" />
     <Compile Include="Markov\MarkovChain.cs" />
@@ -177,6 +229,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="log4net.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

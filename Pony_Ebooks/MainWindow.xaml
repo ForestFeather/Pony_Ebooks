@@ -2,39 +2,62 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:PonyEbooks="clr-namespace:Pony_Ebooks"
-        Title="MainWindow" Height="350" Width="525"
+        Title="Twitter Markov Generator" Height="769" Width="1024"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:UserControls="clr-namespace:Pony_Ebooks.UserControls"
+        xmlns:ViewModels="clr-namespace:Pony_Ebooks.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance d:Type=PonyEbooks:MainWindowViewModel}">
+        d:DataContext="{d:DesignInstance d:Type=ViewModels:IMainWindowViewModel}">
     <Grid>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type ViewModels:PastTweetsTabViewModel}">
+                <UserControls:PastTweetsTabView />
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding Path=NextChain}"></TextBlock>
-        <TextBlock Grid.Row="1" Text="{Binding Path=NextTweetTime}"></TextBlock>
-        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
-            <ItemsControl ItemsSource="{Binding Path=PreviousTweets}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open Source Text"></MenuItem>
+                <MenuItem Header="_Settings"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="_Exit"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Commands">
+                <MenuItem Header="_Post Chain"></MenuItem>
+                <MenuItem Header="_Time Regeneration"></MenuItem>
+                <MenuItem Header="_Chain_Regeneration"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Help Contents"></MenuItem>
+                <MenuItem Header="_About"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <UserControls:CurrentStatusView DataContext="{Binding Path=CurrentStatusViewModel}" />
+        </Grid>
+        <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="240" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <ListBox Grid.Column="0" x:Name="_listControl" ItemsSource="{Binding TabViewModels}"
+                     IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding Path=SelectedTab}" Margin="5">
+                <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                        <Label Content="{Binding Path=Title}" />
                     </DataTemplate>
-            </ItemsControl.ItemTemplate>
-                </ItemsControl>
-        </ScrollViewer>
-
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Button Margin="5" Click="Generate">Generate New Chain</Button>
-            <Button Margin="5" Click="Post">Post Current Chain</Button>
-            <Button Margin="5" Click="Time">New Time</Button>
-        </StackPanel>
-        
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <GridSplitter Grid.Column="0" Width="5" />
+            <ContentPresenter Grid.Column="1" Margin="5" Content="{Binding Path=SelectedTab}" />
+        </Grid>
+        <Grid Grid.Row="3">
+            <UserControls:CommandRowView DataContext="{Binding Path=CommandRowViewModel}" />
+        </Grid>
     </Grid>
 </Window>

@@ -1,10 +1,10 @@
 ﻿// // ==========================================================================================================
 // // 
-// //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindow.xaml.cs 
+// //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTweet.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 8:40 AM, 24/01/2015
-// //  Created Date: 7:10 PM, 18/01/2015
+// //  Last Changed Date: 9:44 PM, 23/01/2015
+// //  Created Date: 9:43 PM, 23/01/2015
 // // 
 // //  Notes:
 // //  
@@ -12,45 +12,32 @@
 
 #region Imported Namespaces
 
-using System.Windows;
-
-using Pony_Ebooks.ViewModels;
+using System;
 
 #endregion
 
-namespace Pony_Ebooks {
+namespace Pony_Ebooks.Models {
     ///=================================================================================================
-    /// <summary>   Interaction logic for MainWindow.xaml. </summary>
+    /// <summary>   Markov tweet. </summary>
     ///
-    /// <remarks>   Collin O' Connor, 1/18/2015. </remarks>
-    ///
-    /// <seealso cref="T:System.Windows.Window"/>
+    /// <remarks>   Collin O' Connor, 1/23/2015. </remarks>
     ///=================================================================================================
-    public partial class MainWindow : Window {
-        #region Constructors
-
-        ///=================================================================================================
-        /// <summary>   Default constructor. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/18/2015. </remarks>
-        ///=================================================================================================
-        public MainWindow( ) {
-            this.InitializeComponent( );
-            this.ViewModel = new MainWindowViewModel( );
-            this.ViewModel.Initialize( );
-            this.DataContext = this.ViewModel;
-        }
-
-        #endregion
-
+    public class MarkovTweet {
         #region Properties
 
         ///=================================================================================================
-        /// <summary>   Gets or sets the view model. </summary>
+        /// <summary>   Gets or sets the text. </summary>
         ///
-        /// <value> The view model. </value>
+        /// <value> The text. </value>
         ///=================================================================================================
-        public MainWindowViewModel ViewModel { get; set; }
+        public string Text { get; set; }
+
+        ///=================================================================================================
+        /// <summary>   Gets or sets the Date/Time of the time. </summary>
+        ///
+        /// <value> The time. </value>
+        ///=================================================================================================
+        public DateTime Time { get; set; }
 
         #endregion
     }

@@ -1,10 +1,10 @@
 ﻿// // ==========================================================================================================
 // // 
-// //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindow.xaml.cs 
+// //  File ID: Pony_Ebooks - Pony_Ebooks - IPastTweetsTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 8:40 AM, 24/01/2015
-// //  Created Date: 7:10 PM, 18/01/2015
+// //  Last Changed Date: 5:05 AM, 25/01/2015
+// //  Created Date: 5:02 AM, 25/01/2015
 // // 
 // //  Notes:
 // //  
@@ -12,45 +12,45 @@
 
 #region Imported Namespaces
 
-using System.Windows;
+using System;
+using System.Collections.ObjectModel;
 
-using Pony_Ebooks.ViewModels;
+using Pony_Ebooks.Framework;
+using Pony_Ebooks.Models;
 
 #endregion
 
-namespace Pony_Ebooks {
+namespace Pony_Ebooks.ViewModels {
     ///=================================================================================================
-    /// <summary>   Interaction logic for MainWindow.xaml. </summary>
+    /// <summary>   Interface for past tweets tab view model. </summary>
     ///
-    /// <remarks>   Collin O' Connor, 1/18/2015. </remarks>
+    /// <remarks>   Collin O' Connor, 1/25/2015. </remarks>
     ///
-    /// <seealso cref="T:System.Windows.Window"/>
+    /// <seealso cref="T:ITabViewModel"/>
     ///=================================================================================================
-    public partial class MainWindow : Window {
-        #region Constructors
-
-        ///=================================================================================================
-        /// <summary>   Default constructor. </summary>
-        ///
-        /// <remarks>   Collin O' Connor, 1/18/2015. </remarks>
-        ///=================================================================================================
-        public MainWindow( ) {
-            this.InitializeComponent( );
-            this.ViewModel = new MainWindowViewModel( );
-            this.ViewModel.Initialize( );
-            this.DataContext = this.ViewModel;
-        }
-
-        #endregion
-
+    public interface IPastTweetsTabViewModel : ITabViewModel {
         #region Properties
 
         ///=================================================================================================
-        /// <summary>   Gets or sets the view model. </summary>
+        /// <summary>   Gets the past tweets. </summary>
         ///
-        /// <value> The view model. </value>
+        /// <value> The past tweets. </value>
         ///=================================================================================================
-        public MainWindowViewModel ViewModel { get; set; }
+        ObservableCollection<MarkovTweet> PastTweets { get; }
+
+        #endregion
+
+        #region Members
+
+        ///=================================================================================================
+        /// <summary>   Adds a tweet to 'time'. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/25/2015. </remarks>
+        ///
+        /// <param name="text"> The text. </param>
+        /// <param name="time"> Date/Time of the time. </param>
+        ///=================================================================================================
+        void AddTweet( string text, DateTime time );
 
         #endregion
     }
