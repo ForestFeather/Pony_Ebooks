@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - PastTweetsTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:03 AM, 25/01/2015
+// //  Last Changed Date: 5:10 AM, 25/01/2015
 // //  Created Date: 4:56 AM, 25/01/2015
 // // 
 // //  Notes:
@@ -66,7 +66,7 @@ namespace Pony_Ebooks.ViewModels {
         /// <seealso cref="M:Pony_Ebooks.ViewModels.IPastTweetsTabViewModel.AddTweet(string,DateTime)"/>
         ///=================================================================================================
         public void AddTweet( string text, DateTime time ) {
-            this.PastTweets.Add( new MarkovTweet { Text = text, Time = time } );
+            this.PastTweets.Insert( 0, new MarkovTweet { Text = text, Time = time } );
         }
 
         #endregion

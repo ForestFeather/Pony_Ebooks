@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:07 AM, 25/01/2015
+// //  Last Changed Date: 5:29 AM, 25/01/2015
 // //  Created Date: 8:12 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -124,14 +124,21 @@ namespace Pony_Ebooks.ViewModels {
                                      };
 
             // Timer event last, after all tabs/etc have been loaded
-            this.TimerControl.TimerEvent = o =>
-                                               {
-                                                   pastTweets.AddTweet(
-                                                       this.MarkovManager.NextChain, this.TimerControl.TriggerTime );
-                                                   this.TimerControl.NewTriggerTime( );
-                                                   this.TweetManager.Post( this.MarkovManager.NextChain );
-                                                   this.MarkovManager.GenerateNewChain( );
-                                               };
+            this.TimerControl.TimerEvent = this.CommandRowViewModel.PostAction = o =>
+                                                                                     {
+                                                                                         pastTweets.AddTweet(
+                                                                                             this.MarkovManager
+                                                                                                 .NextChain,
+                                                                                             this.TimerControl
+                                                                                                 .TriggerTime );
+                                                                                         this.TimerControl
+                                                                                             .NewTriggerTime( );
+                                                                                         this.TweetManager.Post(
+                                                                                             this.MarkovManager
+                                                                                                 .NextChain );
+                                                                                         this.MarkovManager
+                                                                                             .GenerateNewChain( );
+                                                                                     };
 
             return this.MarkovManager.Initialize( ) && this.TimerControl.Initialize( ) && this.TimerControl.Start( );
         }

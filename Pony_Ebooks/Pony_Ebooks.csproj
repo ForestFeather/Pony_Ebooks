@@ -137,6 +137,9 @@
     <Compile Include="UserControls\CurrentStatusView.xaml.cs">
       <DependentUpon>CurrentStatusView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PastTweetsTabView.xaml.cs">
+      <DependentUpon>PastTweetsTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\interfaces\IPastTweetsTabViewModel.cs" />
     <Compile Include="ViewModels\PastTweetsTabViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -156,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CurrentStatusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PastTweetsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

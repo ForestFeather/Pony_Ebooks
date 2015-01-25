@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - ICommandRowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:07 PM, 23/01/2015
+// //  Last Changed Date: 5:27 AM, 25/01/2015
 // //  Created Date: 8:38 PM, 23/01/2015
 // // 
 // //  Notes:
@@ -12,11 +12,13 @@
 
 #region Imported Namespaces
 
+using System;
+
 using Pony_Ebooks.Framework;
 
 #endregion
 
-namespace Pony_Ebooks {
+namespace Pony_Ebooks.ViewModels {
     ///=================================================================================================
     /// <summary>   Interface for command row view model. </summary>
     ///
@@ -45,6 +47,13 @@ namespace Pony_Ebooks {
         /// <value> The new time command. </value>
         ///=================================================================================================
         IRelayCommand NewTimeCommand { get; }
+
+        ///=================================================================================================
+        /// <summary>   Gets the post action. </summary>
+        ///
+        /// <value> The post action. </value>
+        ///=================================================================================================
+        Action<object> PostAction { get; set;  }
 
         #endregion
     }

@@ -35,12 +35,22 @@
         <Grid Grid.Row="1">
             <UserControls:CurrentStatusView DataContext="{Binding Path=CurrentStatusViewModel}" />
         </Grid>
-        <TabControl Grid.Row="2" Margin="5" ItemsSource="{Binding Path=TabViewModels}">
+        <TabControl Grid.Row="2" Margin="5" x:Name="_tabElement" ItemsSource="{Binding Path=TabViewModels}">
+            <TabControl.Resources>
+                <DataTemplate DataType="{x:Type ViewModels:PastTweetsTabViewModel}">
+                    <UserControls:PastTweetsTabView />
+                </DataTemplate>
+            </TabControl.Resources>
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Title}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentPresenter DataContext="{Binding ElementName=_tabElement,Path=DataContext}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
         </TabControl>
         <Grid Grid.Row="3">
             <UserControls:CommandRowView DataContext="{Binding Path=CommandRowViewModel}" />

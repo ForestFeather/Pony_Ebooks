@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - CommandRowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 8:36 AM, 24/01/2015
+// //  Last Changed Date: 5:28 AM, 25/01/2015
 // //  Created Date: 8:30 AM, 24/01/2015
 // // 
 // //  Notes:
@@ -11,6 +11,8 @@
 // // ==========================================================================================================
 
 #region Imported Namespaces
+
+using System;
 
 using Pony_Ebooks.Framework;
 using Pony_Ebooks.Models;
@@ -26,6 +28,7 @@ namespace Pony_Ebooks.ViewModels {
     /// <remarks>   Collin O' Connor, 1/24/2015. </remarks>
     ///
     /// <seealso cref="T:Pony_Ebooks.Framework.ViewModel"/>
+    /// <seealso cref="T:Pony_Ebooks.ViewModels.ICommandRowViewModel"/>
     /// <seealso cref="T:Pony_Ebooks.ICommandRowViewModel"/>
     ///=================================================================================================
     public class CommandRowViewModel : ViewModel, ICommandRowViewModel {
@@ -75,6 +78,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <value> The post chain command. </value>
         ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.ICommandRowViewModel.PostChainCommand"/>
         /// <seealso cref="P:Pony_Ebooks.ICommandRowViewModel.PostChainCommand"/>
         ///=================================================================================================
         public IRelayCommand PostChainCommand { get; private set; }
@@ -84,6 +88,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <value> The new chain command. </value>
         ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.ICommandRowViewModel.NewChainCommand"/>
         /// <seealso cref="P:Pony_Ebooks.ICommandRowViewModel.NewChainCommand"/>
         ///=================================================================================================
         public IRelayCommand NewChainCommand { get; private set; }
@@ -93,9 +98,19 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <value> The new time command. </value>
         ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.ICommandRowViewModel.NewTimeCommand"/>
         /// <seealso cref="P:Pony_Ebooks.ICommandRowViewModel.NewTimeCommand"/>
         ///=================================================================================================
         public IRelayCommand NewTimeCommand { get; private set; }
+
+        ///=================================================================================================
+        /// <summary>   Gets or sets the post action. </summary>
+        ///
+        /// <value> The post action. </value>
+        ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.ICommandRowViewModel.PostAction"/>
+        ///=================================================================================================
+        public Action<object> PostAction { get; set; }
 
         #endregion
 
@@ -131,9 +146,7 @@ namespace Pony_Ebooks.ViewModels {
         /// <param name="obj">  The object. </param>
         ///=================================================================================================
         private void PostChain( object obj ) {
-            this._timerControl.NewTriggerTime( );
-            this._tweetManager.Post( this._markovManager.NextChain );
-            this._markovManager.GenerateNewChain( );
+            this.PostAction( obj );
         }
 
         #endregion

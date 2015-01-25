@@ -121,6 +121,7 @@ namespace Pony_Ebooks.Models {
             this._rand = new Random();
             this._timer = new DispatcherTimer { Interval = new TimeSpan( 0, 0, 1 ), IsEnabled = false };
             this._timer.Tick += this.TimerOnTick;
+            this.NewTriggerTime( );
 
             return true;
         }
