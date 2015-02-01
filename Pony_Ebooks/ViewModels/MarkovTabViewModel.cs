@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 10:16 PM, 31/01/2015
+// //  Last Changed Date: 10:26 PM, 31/01/2015
 // //  Created Date: 9:53 PM, 27/01/2015
 // // 
 // //  Notes:
@@ -14,6 +14,8 @@
 
 using System;
 using System.Collections.ObjectModel;
+
+using Microsoft.Win32;
 
 using Pony_Ebooks.Framework;
 using Pony_Ebooks.Models;
@@ -247,7 +249,7 @@ namespace Pony_Ebooks.ViewModels {
         /// <returns>   true if we can remove selected sources, false if not. </returns>
         ///=================================================================================================
         private bool CanRemoveSelectedSources( object obj ) {
-            return false;
+            return true;
         }
 
         ///=================================================================================================
@@ -255,13 +257,18 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
         ///
-        /// <exception cref="NotImplementedException">  Thrown when the requested operation is
-        ///                                             unimplemented. </exception>
-        ///
         /// <param name="obj">  The object. </param>
         ///=================================================================================================
         private void OnRemoveSelectedSources( object obj ) {
-            throw new NotImplementedException( );
+            // Get rid of them from the root
+            this._markovManager.SourceTexts.Clear( );
+            foreach( var sourceText in this.SourceTexts ) {
+                if( !sourceText.Item2 ) {
+                    this._markovManager.AddSource( sourceText.Item1, true );
+                } else {
+                    this.SourceTexts.Remove( sourceText );
+                }
+            }
         }
 
         ///=================================================================================================
@@ -274,7 +281,7 @@ namespace Pony_Ebooks.ViewModels {
         /// <returns>   true if we can load selected sources, false if not. </returns>
         ///=================================================================================================
         private bool CanLoadSelectedSources( object obj ) {
-            return false;
+            return true;
         }
 
         ///=================================================================================================
@@ -282,13 +289,14 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
         ///
-        /// <exception cref="NotImplementedException">  Thrown when the requested operation is
-        ///                                             unimplemented. </exception>
-        ///
         /// <param name="obj">  The object. </param>
         ///=================================================================================================
         private void OnLoadSelectedSources( object obj ) {
-            throw new NotImplementedException( );
+            // Save sources and load them
+            this._markovManager.SourceTexts.Clear( );
+            foreach( var sourceText in this.SourceTexts ) {
+                this._markovManager.AddSource( sourceText.Item1, sourceText.Item2 );
+            }
         }
 
         ///=================================================================================================
@@ -302,7 +310,18 @@ namespace Pony_Ebooks.ViewModels {
         /// <param name="obj">  The object. </param>
         ///=================================================================================================
         private void OnAddSource( object obj ) {
-            throw new NotImplementedException( );
+            var fileDialog = new OpenFileDialog();
+
+            fileDialog.Filter = "Text files (*.txt)|*.txt";
+            fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            fileDialog.Multiselect = true;
+
+            if( fileDialog.ShowDialog( ) != true ) {
+                return;
+            }
+
+            // Load each source text item
+            foreach( var filename in fileDialog.FileNames ) this.SourceTexts.Add( new Pair<string, bool>( filename, true ) );
         }
 
         ///=================================================================================================

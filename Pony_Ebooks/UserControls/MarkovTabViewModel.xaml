@@ -44,19 +44,19 @@
                 Save Settings
             </Button>
             <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Left"
-                    Command="{Binding Path=SaveSettingsCommand}">
+                    Command="{Binding Path=ReloadSettingsCommand}">
                 Reload Settings
             </Button>
             <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Right"
-                    Command="{Binding Path=SaveSettingsCommand}">
+                    Command="{Binding Path=LoadSelectedSourcesCommand}">
                 Load Sources
             </Button>
             <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Right"
-                    Command="{Binding Path=SaveSettingsCommand}">
+                    Command="{Binding Path=RemoveSelectedSourcesCommand}">
                 Remove Sources
             </Button>
             <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Right"
-                    Command="{Binding Path=SaveSettingsCommand}">
+                    Command="{Binding Path=AddSourceCommand}">
                 Add Sources
             </Button>
         </DockPanel>
@@ -64,7 +64,7 @@
                  ItemsSource="{Binding Path=SourceTexts}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox IsChecked="{Binding Path=Item2, Mode=TwoWay}" Content="{Binding Path=Item1}" />
+                    <CheckBox Style="{StaticResource ContentStyle}" IsChecked="{Binding Path=Item2, Mode=TwoWay}" Content="{Binding Path=Item1}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
