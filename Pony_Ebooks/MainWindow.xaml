@@ -13,6 +13,9 @@
             <DataTemplate DataType="{x:Type ViewModels:PastTweetsTabViewModel}">
                 <UserControls:PastTweetsTabView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type ViewModels:MarkovTabViewModel}">
+                <UserControls:MarkovTabViewModel />
+            </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>

@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:58 AM, 25/01/2015
-// //  Created Date: 8:12 PM, 23/01/2015
+// //  Last Changed Date: 9:49 PM, 31/01/2015
+// //  Created Date: 7:11 AM, 25/01/2015
 // // 
 // //  Notes:
 // //  
@@ -134,13 +134,15 @@ namespace Pony_Ebooks.ViewModels {
 
             // Tabs
             IPastTweetsTabViewModel pastTweets = new PastTweetsTabViewModel( );
+            IMarkovTabViewModel markovTab = new MarkovTabViewModel( this.MarkovManager );
 
             this.CurrentStatusViewModel = new CurrentStatusViewModel( this.MarkovManager, this.TimerControl );
             this.CommandRowViewModel = new CommandRowViewModel(
                 this.TimerControl, this.MarkovManager, this.TweetManager );
             this.TabViewModels = new ObservableCollection<ITabViewModel>
                                      {
-                                         pastTweets
+                                         pastTweets,
+                                         markovTab
                                      };
 
             // Timer event last, after all tabs/etc have been loaded
@@ -160,7 +162,8 @@ namespace Pony_Ebooks.ViewModels {
                                                                                              .GenerateNewChain( );
                                                                                      };
 
-            return this.MarkovManager.Initialize( ) && this.TimerControl.Initialize( ) && this.TimerControl.Start( );
+            return this.MarkovManager.Initialize( ) && markovTab.Initialize( ) && this.TimerControl.Initialize( ) &&
+                   this.TimerControl.Start( );
         }
 
         #endregion

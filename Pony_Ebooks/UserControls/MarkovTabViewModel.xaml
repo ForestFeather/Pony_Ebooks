@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Pony_Ebooks.UserControls.MarkovTabViewModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ViewModels="clr-namespace:Pony_Ebooks.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance d:Type=ViewModels:IMarkovTabViewModel}">
+    <Grid>
+        <Grid.Resources>
+            <Style x:Key="ContentStyle" TargetType="{x:Type Control}">
+                <Setter Property="Margin" Value="5" />
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Style="{StaticResource ContentStyle}" Grid.Row="0" Grid.Column="0">Minimum Characters:</Label>
+        <Label Style="{StaticResource ContentStyle}" Grid.Row="1" Grid.Column="0">Maximum Characters:</Label>
+        <Label Style="{StaticResource ContentStyle}" Grid.Row="2" Grid.Column="0">Markov Weight:</Label>
+        <Label Style="{StaticResource ContentStyle}" Grid.Row="3" Grid.Column="0">Markov Order:</Label>
+        <TextBox Style="{StaticResource ContentStyle}" Grid.Row="0" Grid.Column="1"
+                 Text="{Binding Path=MinChars, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Style="{StaticResource ContentStyle}" Grid.Row="1" Grid.Column="1"
+                 Text="{Binding Path=MaxChars, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Style="{StaticResource ContentStyle}" Grid.Row="2" Grid.Column="1"
+                 Text="{Binding Path=Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Style="{StaticResource ContentStyle}" Grid.Row="3" Grid.Column="1"
+                 Text="{Binding Path=Order, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <DockPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" LastChildFill="False">
+            <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Left"
+                    Command="{Binding Path=SaveSettingsCommand}">
+                Save Settings
+            </Button>
+            <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Left"
+                    Command="{Binding Path=SaveSettingsCommand}">
+                Reload Settings
+            </Button>
+            <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Right"
+                    Command="{Binding Path=SaveSettingsCommand}">
+                Load Sources
+            </Button>
+            <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Right"
+                    Command="{Binding Path=SaveSettingsCommand}">
+                Remove Sources
+            </Button>
+            <Button Style="{StaticResource ContentStyle}" DockPanel.Dock="Right"
+                    Command="{Binding Path=SaveSettingsCommand}">
+                Add Sources
+            </Button>
+        </DockPanel>
+        <ListBox Style="{StaticResource ContentStyle}" Grid.Row="0" Grid.RowSpan="5" Grid.Column="2"
+                 ItemsSource="{Binding Path=SourceTexts}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox IsChecked="{Binding Path=Item2, Mode=TwoWay}" Content="{Binding Path=Item1}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="5" Width="5" />
+    </Grid>
+</UserControl>

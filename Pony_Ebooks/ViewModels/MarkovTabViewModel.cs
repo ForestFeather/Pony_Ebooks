@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:55 PM, 27/01/2015
+// //  Last Changed Date: 8:49 PM, 31/01/2015
 // //  Created Date: 9:53 PM, 27/01/2015
 // // 
 // //  Notes:
@@ -32,10 +32,15 @@ namespace Pony_Ebooks.ViewModels {
     /// <seealso cref="T:Pony_Ebooks.ViewModels.IMarkovTabViewModel"/>
     ///=================================================================================================
     public class MarkovTabViewModel : TabViewModel, IMarkovTabViewModel {
+        #region Fields and Constants
 
+        /// <summary>   The log. </summary>
         private static readonly ILog _log = LogManager.GetLogger( typeof( MarkovTabViewModel ) );
 
-        private IMarkovManager _markovManager;
+        #endregion
+
+        /// <summary>   Manager for markov. </summary>
+        private readonly IMarkovManager _markovManager;
 
         /// <summary>   The maximum characters. </summary>
         private int _maxChars;
@@ -52,10 +57,21 @@ namespace Pony_Ebooks.ViewModels {
         /// <summary>   The weight. </summary>
         private int _weight;
 
+        #region Constructors
+
+        ///=================================================================================================
+        /// <summary>   Constructor. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <param name="markovManager">    Manager for markov. </param>
+        ///=================================================================================================
         public MarkovTabViewModel( IMarkovManager markovManager ) {
-            _markovManager = markovManager;
+            this._markovManager = markovManager;
+            this.Title = "Markov Control";
         }
 
+        #endregion
 
         #region IMarkovTabViewModel Members
 
@@ -193,71 +209,160 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <remarks>   Collin O' Connor, 1/27/2015. </remarks>
         ///
-        /// <exception cref="NotImplementedException">  Thrown when the requested operation is
-        ///                                             unimplemented. </exception>
-        ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///
         /// <seealso cref="M:Pony_Ebooks.ViewModels.IMarkovTabViewModel.Initialize()"/>
         ///=================================================================================================
         public bool Initialize( ) {
             // Set vars from base
-            if (!LoadVarsFromSource()) {
+            if( !this.LoadVarsFromSource( ) ) {
                 _log.Error( "Unable to load values from source into viewmodel." );
                 return false;
             }
-            
 
             // Load commands
-            SaveSettingsCommand = new RelayCommand( OnSaveSettings, CanSaveSettings );
-            ReloadSettingsCommand = new RelayCommand( OnReloadSettings );
-            AddSourceCommand = new RelayCommand(OnAddSource);
-            LoadSelectedSourcesCommand = new RelayCommand( OnLoadSelectedSources, CanLoadSelectedSources );
-            RemoveSelectedSourcesCommand = new RelayCommand( OnRemoveSelectedSources, CanRemoveSelectedSources );
-
+            this.SaveSettingsCommand = new RelayCommand( this.OnSaveSettings, this.CanSaveSettings );
+            this.ReloadSettingsCommand = new RelayCommand( this.OnReloadSettings );
+            this.AddSourceCommand = new RelayCommand( this.OnAddSource );
+            this.LoadSelectedSourcesCommand = new RelayCommand(
+                this.OnLoadSelectedSources, this.CanLoadSelectedSources );
+            this.RemoveSelectedSourcesCommand = new RelayCommand(
+                this.OnRemoveSelectedSources, this.CanRemoveSelectedSources );
 
             return true;
         }
 
+        #endregion
+
+        #region Members
+
+        ///=================================================================================================
+        /// <summary>   Determine if we can remove selected sources. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///
+        /// <returns>   true if we can remove selected sources, false if not. </returns>
+        ///=================================================================================================
         private bool CanRemoveSelectedSources( object obj ) {
-            throw new NotImplementedException( );
+            return false;
         }
 
+        ///=================================================================================================
+        /// <summary>   Executes the remove selected sources action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <exception cref="NotImplementedException">  Thrown when the requested operation is
+        ///                                             unimplemented. </exception>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///=================================================================================================
         private void OnRemoveSelectedSources( object obj ) {
             throw new NotImplementedException( );
         }
 
+        ///=================================================================================================
+        /// <summary>   Determine if we can load selected sources. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///
+        /// <returns>   true if we can load selected sources, false if not. </returns>
+        ///=================================================================================================
         private bool CanLoadSelectedSources( object obj ) {
-            throw new NotImplementedException( );
+            return false;
         }
 
+        ///=================================================================================================
+        /// <summary>   Executes the load selected sources action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <exception cref="NotImplementedException">  Thrown when the requested operation is
+        ///                                             unimplemented. </exception>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///=================================================================================================
         private void OnLoadSelectedSources( object obj ) {
             throw new NotImplementedException( );
         }
 
+        ///=================================================================================================
+        /// <summary>   Executes the add source action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <exception cref="NotImplementedException">  Thrown when the requested operation is
+        ///                                             unimplemented. </exception>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///=================================================================================================
         private void OnAddSource( object obj ) {
             throw new NotImplementedException( );
         }
 
+        ///=================================================================================================
+        /// <summary>   Executes the reload settings action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///=================================================================================================
         private void OnReloadSettings( object obj ) {
-            throw new NotImplementedException( );
+            this.LoadVarsFromSource( );
+            this.IsDirty = false;
         }
 
+        ///=================================================================================================
+        /// <summary>   Determine if we can save settings. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///
+        /// <returns>   true if we can save settings, false if not. </returns>
+        ///=================================================================================================
         private bool CanSaveSettings( object obj ) {
-            throw new NotImplementedException( );
+            return this.IsDirty;
         }
 
+        ///=================================================================================================
+        /// <summary>   Executes the save settings action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <param name="obj">  The object. </param>
+        ///=================================================================================================
         private void OnSaveSettings( object obj ) {
-            throw new NotImplementedException( );
+            try {
+                this._markovManager.MinChars = this.MinChars;
+                this._markovManager.MaxChars = this.MaxChars;
+                this._markovManager.MarkovWeight = this.Weight;
+                this._markovManager.MarkovOrder = this.Order;
+            } catch( Exception e ) {
+                _log.Error( "Error saving values.", e );
+                return;
+            }
+
+            this.IsDirty = false;
         }
 
+        ///=================================================================================================
+        /// <summary>   Loads variables from source. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        ///
+        /// <returns>   true if it succeeds, false if it fails. </returns>
+        ///=================================================================================================
         private bool LoadVarsFromSource( ) {
             try {
-                MinChars = _markovManager.MinChars;
-                MaxChars = _markovManager.MaxChars;
-                Weight = _markovManager.MarkovWeight;
-                Order = _markovManager.MarkovOrder;
-
+                this.MinChars = this._markovManager.MinChars;
+                this.MaxChars = this._markovManager.MaxChars;
+                this.Weight = this._markovManager.MarkovWeight;
+                this.Order = this._markovManager.MarkovOrder;
             } catch( Exception e ) {
                 _log.Error( "Error setting values.", e );
                 return false;
