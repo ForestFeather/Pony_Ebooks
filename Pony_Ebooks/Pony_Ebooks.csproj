@@ -128,6 +128,7 @@
     <Compile Include="Models\interfaces\ITweetManager.cs" />
     <Compile Include="Models\MarkovManager.cs" />
     <Compile Include="Models\MarkovTweet.cs" />
+    <Compile Include="Models\Pair.cs" />
     <Compile Include="Models\TimerControl.cs" />
     <Compile Include="Models\TweetManager.cs" />
     <Compile Include="Properties\Annotations.cs" />

@@ -16,6 +16,7 @@ using System;
 using System.Collections.ObjectModel;
 
 using Pony_Ebooks.Framework;
+using Pony_Ebooks.Models;
 
 #endregion
 
@@ -70,7 +71,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <value> The source texts. </value>
         ///=================================================================================================
-        ObservableCollection<Tuple<string, bool>> SourceTexts { get; set; }
+        ObservableCollection<Pair<string, bool>> SourceTexts { get; set; }
 
         ///=================================================================================================
         /// <summary>   Gets the save settings command. </summary>

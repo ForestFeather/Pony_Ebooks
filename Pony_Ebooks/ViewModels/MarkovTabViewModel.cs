@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 8:49 PM, 31/01/2015
+// //  Last Changed Date: 10:16 PM, 31/01/2015
 // //  Created Date: 9:53 PM, 27/01/2015
 // // 
 // //  Notes:
@@ -68,6 +68,7 @@ namespace Pony_Ebooks.ViewModels {
         ///=================================================================================================
         public MarkovTabViewModel( IMarkovManager markovManager ) {
             this._markovManager = markovManager;
+            this.SourceTexts = new ObservableCollection<Pair<string, bool>>( );
             this.Title = "Markov Control";
         }
 
@@ -157,7 +158,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.SourceTexts"/>
         ///=================================================================================================
-        public ObservableCollection<Tuple<string, bool>> SourceTexts { get; set; }
+        public ObservableCollection<Pair<string, bool>> SourceTexts { get; set; }
 
         ///=================================================================================================
         /// <summary>   Gets or sets the save settings command. </summary>
@@ -347,6 +348,13 @@ namespace Pony_Ebooks.ViewModels {
                 return;
             }
 
+            // Save sources
+            this._markovManager.SourceTexts.Clear( );
+            foreach( var sourceText in this.SourceTexts ) {
+                this._markovManager.AddSource( sourceText.Item1, sourceText.Item2 );
+            }
+
+
             this.IsDirty = false;
         }
 
@@ -359,10 +367,17 @@ namespace Pony_Ebooks.ViewModels {
         ///=================================================================================================
         private bool LoadVarsFromSource( ) {
             try {
+                // Load static
                 this.MinChars = this._markovManager.MinChars;
                 this.MaxChars = this._markovManager.MaxChars;
                 this.Weight = this._markovManager.MarkovWeight;
                 this.Order = this._markovManager.MarkovOrder;
+
+                // Load sources
+                this.SourceTexts.Clear( );
+                foreach( var sourceText in this._markovManager.SourceTexts ) {
+                    this.SourceTexts.Add( new Pair<string, bool>( sourceText.Item1, sourceText.Item2 ) );
+                }
             } catch( Exception e ) {
                 _log.Error( "Error setting values.", e );
                 return false;
