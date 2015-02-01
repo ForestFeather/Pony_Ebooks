@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 10:26 PM, 31/01/2015
+// //  Last Changed Date: 6:18 AM, 01/02/2015
 // //  Created Date: 9:53 PM, 27/01/2015
 // // 
 // //  Notes:
@@ -13,6 +13,7 @@
 #region Imported Namespaces
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using Microsoft.Win32;
@@ -262,7 +263,8 @@ namespace Pony_Ebooks.ViewModels {
         private void OnRemoveSelectedSources( object obj ) {
             // Get rid of them from the root
             this._markovManager.SourceTexts.Clear( );
-            foreach( var sourceText in this.SourceTexts ) {
+            var texts = new List<Pair<string, bool>>( SourceTexts );
+            foreach( var sourceText in texts ) {
                 if( !sourceText.Item2 ) {
                     this._markovManager.AddSource( sourceText.Item1, true );
                 } else {
@@ -310,18 +312,22 @@ namespace Pony_Ebooks.ViewModels {
         /// <param name="obj">  The object. </param>
         ///=================================================================================================
         private void OnAddSource( object obj ) {
-            var fileDialog = new OpenFileDialog();
-
-            fileDialog.Filter = "Text files (*.txt)|*.txt";
-            fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            fileDialog.Multiselect = true;
+            var fileDialog = new OpenFileDialog
+                                 {
+                                     Filter = "Text files (*.txt)|*.txt",
+                                     InitialDirectory =
+                                         Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ),
+                                     Multiselect = true
+                                 };
 
             if( fileDialog.ShowDialog( ) != true ) {
                 return;
             }
 
             // Load each source text item
-            foreach( var filename in fileDialog.FileNames ) this.SourceTexts.Add( new Pair<string, bool>( filename, true ) );
+            foreach( var filename in fileDialog.FileNames ) {
+                this.SourceTexts.Add( new Pair<string, bool>( filename, true ) );
+            }
         }
 
         ///=================================================================================================
