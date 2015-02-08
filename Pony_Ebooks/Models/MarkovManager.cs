@@ -325,7 +325,7 @@ namespace Pony_Ebooks.Models {
             var lines = text.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
 
             // Split each sentence and add to Markov system
-            foreach( var words in lines.Select( line => line.Split( new[] { " " }, StringSplitOptions.None ) ) ) {
+            foreach( var words in lines.Select( line => line.Trim().Split( new[] { " " }, StringSplitOptions.None ) ) ) {
                 this.MarkovChain.Add( words );
                 wordCount += words.Length;
             }
