@@ -221,7 +221,7 @@ namespace Pony_Ebooks.Models {
 
             do {
                 var words = this.MarkovChain.Chain( startState ).ToList( );
-                output = string.Empty;
+                output = string.IsNullOrEmpty( startChain ) ? string.Empty : startChain + " ";
                 for( int i = 0; i < words.Count; i++ ) {
                     output += words[ i ] + ( i == words.Count - 1 ? "" : " " );
                 }
@@ -231,7 +231,7 @@ namespace Pony_Ebooks.Models {
             } while( len >= this.MaxChars ||
                      len <= this.MinChars );
 
-            _log.Info( "Generated valid chain in " + count + " tries. Starting chain: " + startChain );
+            _log.Info( "Generated valid chain in " + count + " tries. Starting chain: " + startState );
 
             this.PreviousChain = this.NextChain;
             this.NextChain = output;
@@ -303,7 +303,8 @@ namespace Pony_Ebooks.Models {
         ///=================================================================================================
         public IEnumerable<string> GetInitialChains( ) {
             var states = this.MarkovChain.GetInitialStates( );
-            return states.Select( state => string.Join( " ", state.Key ) ).ToList( );
+            var orderedStates = states.OrderByDescending( kvp => kvp.Value );
+            return orderedStates.Select( state => string.Join( " ", state.Key ) ).ToList( );
         }
 
         /// <summary>   Event queue for all listeners interested in PropertyChanged events. </summary>
