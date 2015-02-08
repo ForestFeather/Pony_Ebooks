@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Pony_Ebooks.UserControls.TimerControlTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ViewModels="clr-namespace:Pony_Ebooks.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="600"
+             d:DataContext="{d:DesignInstance d:Type=ViewModels:TimerControlTabViewModel}">
+    <Grid>
+        <Grid.Resources>
+            <Style x:Key="BaseControlStyle" TargetType="{x:Type Control}">
+                <Setter Property="Margin" Value="5" />
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource BaseControlStyle}" />
+            <Style TargetType="Button" BasedOn="{StaticResource BaseControlStyle}" />
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="5" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" FontSize="14" FontWeight="Black">Timer Control/Setup</Label>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">Hours</Label>
+            <Label Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center">Minutes</Label>
+            <Label Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center">Seconds</Label>
+            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">Minimum Time:</Label>
+            <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right">Maximum Time:</Label>
+
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=MinHours}" />
+            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=MinMinutes}" />
+            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Path=MinSeconds}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=MaxHours}" />
+            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=MaxMinutes}" />
+            <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Path=MaxSeconds}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0">Minimum Timespan:</Label>
+            <Label Grid.Column="2">Maximum Timespan:</Label>
+            <TextBlock Grid.Column="1" Text="{Binding Path=TotalMinTimespan}" />
+            <TextBlock Grid.Column="3" Text="{Binding Path=TotalMaxTimespan}" />
+        </Grid>
+
+        <DockPanel Grid.Row="3" LastChildFill="False">
+            <Button DockPanel.Dock="Right" Command="{Binding Path=SetNewTimespansCommand}">Set Timespans</Button>
+        </DockPanel>
+    </Grid>
+</UserControl>

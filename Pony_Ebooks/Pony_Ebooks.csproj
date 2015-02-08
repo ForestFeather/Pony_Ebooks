@@ -147,12 +147,17 @@
     <Compile Include="UserControls\PastTweetsTabView.xaml.cs">
       <DependentUpon>PastTweetsTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\TimerControlTabView.xaml.cs">
+      <DependentUpon>TimerControlTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\InitialStatesTabViewModel.cs" />
     <Compile Include="ViewModels\interfaces\IInitialStatesTabViewModel.cs" />
     <Compile Include="ViewModels\interfaces\IMarkovTabViewModel.cs" />
     <Compile Include="ViewModels\interfaces\IPastTweetsTabViewModel.cs" />
+    <Compile Include="ViewModels\interfaces\ITimerControlTabViewModel.cs" />
     <Compile Include="ViewModels\MarkovTabViewModel.cs" />
     <Compile Include="ViewModels\PastTweetsTabViewModel.cs" />
+    <Compile Include="ViewModels\TimerControlTabViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -186,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\PostPostsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\TimerControlTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

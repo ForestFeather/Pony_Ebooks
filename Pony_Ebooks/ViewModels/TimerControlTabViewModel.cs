@@ -69,6 +69,7 @@ namespace Pony_Ebooks.ViewModels {
         ///=================================================================================================
         public TimerControlTabViewModel( ITimerControl timerControl ) {
             this._timerControl = timerControl;
+            this.Title = "Timer Control";
         }
 
         #endregion
@@ -262,6 +263,7 @@ namespace Pony_Ebooks.ViewModels {
         /// <remarks>   Collin O' Connor, 2/8/2015. </remarks>
         ///=================================================================================================
         private void UpdateTimespanLimits( ) {
+            this.IsDirty = true;
             this.TotalMinTimespan = new TimeSpan( this.MinHours, this.MinMinutes, this.MinSeconds );
             this.TotalMaxTimespan = new TimeSpan( this.MaxHours, this.MaxMinutes, this.MaxSeconds );
         }

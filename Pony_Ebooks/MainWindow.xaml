@@ -19,6 +19,9 @@
             <DataTemplate DataType="{x:Type ViewModels:InitialStatesTabViewModel}">
                 <UserControls:InitialStatesTabView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type ViewModels:TimerControlTabViewModel}">
+                <UserControls:TimerControlTabView />
+            </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>

@@ -135,6 +135,7 @@ namespace Pony_Ebooks.ViewModels {
             // Tabs
             IPastTweetsTabViewModel pastTweets = new PastTweetsTabViewModel( );
             IMarkovTabViewModel markovTab = new MarkovTabViewModel( this.MarkovManager );
+            ITimerControlTabViewModel timerControl = new TimerControlTabViewModel(this.TimerControl);
             IInitialStatesTabViewModel initialStates = new InitialStatesTabViewModel( this.MarkovManager );
 
             this.CurrentStatusViewModel = new CurrentStatusViewModel( this.MarkovManager, this.TimerControl );
@@ -144,6 +145,7 @@ namespace Pony_Ebooks.ViewModels {
                                      {
                                          pastTweets,
                                          markovTab,
+                                         timerControl,
                                          initialStates
                                      };
 
@@ -172,7 +174,7 @@ namespace Pony_Ebooks.ViewModels {
                     };
 
             return this.MarkovManager.Initialize( ) && markovTab.Initialize( ) && initialStates.Initialize( ) &&
-                   this.TimerControl.Initialize( ) &&
+                   this.TimerControl.Initialize( ) && timerControl.Initialize() &&
                    this.TimerControl.Start( );
         }
 
