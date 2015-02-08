@@ -1,9 +1,9 @@
 ﻿// // ==========================================================================================================
 // // 
-// //  File ID: Pony_Ebooks - Pony_Ebooks - IInitialStatesViewModel.cs 
+// //  File ID: Pony_Ebooks - Pony_Ebooks - IInitialStatesTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:32 AM, 08/02/2015
+// //  Last Changed Date: 6:51 AM, 08/02/2015
 // //  Created Date: 6:25 AM, 08/02/2015
 // // 
 // //  Notes:
@@ -23,8 +23,10 @@ namespace Pony_Ebooks.ViewModels {
     /// <summary>   Interface for initial states view model. </summary>
     ///
     /// <remarks>   Collin O' Connor, 2/8/2015. </remarks>
+    ///
+    /// <seealso cref="T:ITabViewModel"/>
     ///=================================================================================================
-    public interface IInitialStatesViewModel {
+    public interface IInitialStatesTabViewModel : ITabViewModel {
         #region Properties
 
         ///=================================================================================================

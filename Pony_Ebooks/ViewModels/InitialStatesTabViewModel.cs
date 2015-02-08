@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - InitialStatesTabViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:38 AM, 08/02/2015
+// //  Last Changed Date: 6:52 AM, 08/02/2015
 // //  Created Date: 6:32 AM, 08/02/2015
 // // 
 // //  Notes:
@@ -26,9 +26,9 @@ namespace Pony_Ebooks.ViewModels {
     /// <remarks>   Collin O' Connor, 2/8/2015. </remarks>
     ///
     /// <seealso cref="T:Pony_Ebooks.Framework.TabViewModel"/>
-    /// <seealso cref="T:Pony_Ebooks.ViewModels.IInitialStatesViewModel"/>
+    /// <seealso cref="T:Pony_Ebooks.ViewModels.IInitialStatesTabViewModel"/>
     ///=================================================================================================
-    public class InitialStatesTabViewModel : TabViewModel, IInitialStatesViewModel {
+    public class InitialStatesTabViewModel : TabViewModel, IInitialStatesTabViewModel {
 
         /// <summary>   Manager for markov. </summary>
         private readonly IMarkovManager _markovManager;
@@ -53,18 +53,19 @@ namespace Pony_Ebooks.ViewModels {
         ///=================================================================================================
         public InitialStatesTabViewModel( IMarkovManager markovManager ) {
             this._markovManager = markovManager;
+            this.Title = "Initial Tweets";
         }
 
         #endregion
 
-        #region IInitialStatesViewModel Members
+        #region IInitialStatesTabViewModel Members
 
         ///=================================================================================================
         /// <summary>   Gets or sets a list of states of the initials. </summary>
         ///
         /// <value> The initial states. </value>
         ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesViewModel.InitialStates"/>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesTabViewModel.InitialStates"/>
         ///=================================================================================================
         public ObservableCollection<string> InitialStates {
             get { return this._initialStates; }
@@ -79,7 +80,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <value> The selected state. </value>
         ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesViewModel.SelectedState"/>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesTabViewModel.SelectedState"/>
         ///=================================================================================================
         public string SelectedState {
             get { return this._selectedState; }
@@ -96,7 +97,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <value> true if use specified initial state, false if not. </value>
         ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesViewModel.UseSpecifiedInitialState"/>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesTabViewModel.UseSpecifiedInitialState"/>
         ///=================================================================================================
         public bool UseSpecifiedInitialState {
             get { return this._useSpecifiedInitialState; }
@@ -111,7 +112,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <value> The refresh states command. </value>
         ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesViewModel.RefreshStatesCommand"/>
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.IInitialStatesTabViewModel.RefreshStatesCommand"/>
         ///=================================================================================================
         public IRelayCommand RefreshStatesCommand { get; private set; }
 
@@ -122,7 +123,7 @@ namespace Pony_Ebooks.ViewModels {
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///
-        /// <seealso cref="M:Pony_Ebooks.ViewModels.IInitialStatesViewModel.Initialize()"/>
+        /// <seealso cref="M:Pony_Ebooks.ViewModels.IInitialStatesTabViewModel.Initialize()"/>
         ///=================================================================================================
         public bool Initialize( ) {
             this.RefreshStatesCommand = new RelayCommand( this.GenerateStates );

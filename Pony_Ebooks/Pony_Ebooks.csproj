@@ -138,12 +138,17 @@
     <Compile Include="UserControls\CurrentStatusView.xaml.cs">
       <DependentUpon>CurrentStatusView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\InitialStatesTabView.xaml.cs">
+      <DependentUpon>InitialStatesTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MarkovTabViewModel.xaml.cs">
       <DependentUpon>MarkovTabViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PastTweetsTabView.xaml.cs">
       <DependentUpon>PastTweetsTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\InitialStatesTabViewModel.cs" />
+    <Compile Include="ViewModels\interfaces\IInitialStatesTabViewModel.cs" />
     <Compile Include="ViewModels\interfaces\IMarkovTabViewModel.cs" />
     <Compile Include="ViewModels\interfaces\IPastTweetsTabViewModel.cs" />
     <Compile Include="ViewModels\MarkovTabViewModel.cs" />
@@ -165,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CurrentStatusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\InitialStatesTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

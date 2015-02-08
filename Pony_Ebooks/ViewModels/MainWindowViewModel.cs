@@ -135,6 +135,7 @@ namespace Pony_Ebooks.ViewModels {
             // Tabs
             IPastTweetsTabViewModel pastTweets = new PastTweetsTabViewModel( );
             IMarkovTabViewModel markovTab = new MarkovTabViewModel( this.MarkovManager );
+            IInitialStatesTabViewModel initialStates = new InitialStatesTabViewModel( this.MarkovManager );
 
             this.CurrentStatusViewModel = new CurrentStatusViewModel( this.MarkovManager, this.TimerControl );
             this.CommandRowViewModel = new CommandRowViewModel(
@@ -142,11 +143,12 @@ namespace Pony_Ebooks.ViewModels {
             this.TabViewModels = new ObservableCollection<ITabViewModel>
                                      {
                                          pastTweets,
-                                         markovTab
+                                         markovTab,
+                                         initialStates
                                      };
 
             // Timer event last, after all tabs/etc have been loaded
-            this.TimerControl.TimerEvent = this.CommandRowViewModel.PostAction = o =>
+            this.TimerControl.TimerEvent = this.CommandRowViewModel.PostAction = obj =>
                                                                                      {
                                                                                          pastTweets.AddTweet(
                                                                                              this.MarkovManager
@@ -158,11 +160,20 @@ namespace Pony_Ebooks.ViewModels {
                                                                                          this.TweetManager.Post(
                                                                                              this.MarkovManager
                                                                                                  .NextChain );
-                                                                                         this.MarkovManager
-                                                                                             .GenerateNewChain( );
+                                                                                         if(
+                                                                                             initialStates
+                                                                                                 .UseSpecifiedInitialState ) {
+                                                                                             MarkovManager
+                                                                                                 .GenerateNewChain(
+                                                                                                     initialStates
+                                                                                                         .SelectedState );
+                                                                                         } else {
+                                                                                             MarkovManager
+                                                                                                 .GenerateNewChain( );
+                                                                                         }
                                                                                      };
 
-            return this.MarkovManager.Initialize( ) && markovTab.Initialize( ) && this.TimerControl.Initialize( ) &&
+            return this.MarkovManager.Initialize( ) && markovTab.Initialize( ) && initialStates.Initialize() && this.TimerControl.Initialize( ) &&
                    this.TimerControl.Start( );
         }
 
