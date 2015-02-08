@@ -231,7 +231,7 @@ namespace Pony_Ebooks.Models {
             } while( len >= this.MaxChars ||
                      len <= this.MinChars );
 
-            _log.Info( "Generated valid chain in " + count + " tries." );
+            _log.Info( "Generated valid chain in " + count + " tries. Starting chain: " + startChain );
 
             this.PreviousChain = this.NextChain;
             this.NextChain = output;

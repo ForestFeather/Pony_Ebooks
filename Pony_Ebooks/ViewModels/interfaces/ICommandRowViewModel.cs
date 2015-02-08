@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - ICommandRowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:27 AM, 25/01/2015
-// //  Created Date: 8:38 PM, 23/01/2015
+// //  Last Changed Date: 7:02 AM, 08/02/2015
+// //  Created Date: 7:11 AM, 25/01/2015
 // // 
 // //  Notes:
 // //  
@@ -49,11 +49,18 @@ namespace Pony_Ebooks.ViewModels {
         IRelayCommand NewTimeCommand { get; }
 
         ///=================================================================================================
-        /// <summary>   Gets the post action. </summary>
+        /// <summary>   Gets or sets the post action. </summary>
         ///
         /// <value> The post action. </value>
         ///=================================================================================================
-        Action<object> PostAction { get; set;  }
+        Action<object> PostAction { get; set; }
+
+        ///=================================================================================================
+        /// <summary>   Gets or sets the generate chain action. </summary>
+        ///
+        /// <value> The generate chain action. </value>
+        ///=================================================================================================
+        Action<object> GenerateChainAction { get; set; }
 
         #endregion
     }

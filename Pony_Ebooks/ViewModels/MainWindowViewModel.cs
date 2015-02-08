@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MainWindowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 9:49 PM, 31/01/2015
+// //  Last Changed Date: 7:06 AM, 08/02/2015
 // //  Created Date: 7:11 AM, 25/01/2015
 // // 
 // //  Notes:
@@ -148,32 +148,31 @@ namespace Pony_Ebooks.ViewModels {
                                      };
 
             // Timer event last, after all tabs/etc have been loaded
-            this.TimerControl.TimerEvent = this.CommandRowViewModel.PostAction = obj =>
-                                                                                     {
-                                                                                         pastTweets.AddTweet(
-                                                                                             this.MarkovManager
-                                                                                                 .NextChain,
-                                                                                             this.TimerControl
-                                                                                                 .TriggerTime );
-                                                                                         this.TimerControl
-                                                                                             .NewTriggerTime( );
-                                                                                         this.TweetManager.Post(
-                                                                                             this.MarkovManager
-                                                                                                 .NextChain );
-                                                                                         if(
-                                                                                             initialStates
-                                                                                                 .UseSpecifiedInitialState ) {
-                                                                                             MarkovManager
-                                                                                                 .GenerateNewChain(
-                                                                                                     initialStates
-                                                                                                         .SelectedState );
-                                                                                         } else {
-                                                                                             MarkovManager
-                                                                                                 .GenerateNewChain( );
-                                                                                         }
-                                                                                     };
+            this.CommandRowViewModel.GenerateChainAction =
+                obj =>
+                    {
+                        if( initialStates.UseSpecifiedInitialState ) {
+                            this.MarkovManager.GenerateNewChain( initialStates.SelectedState );
+                        } else {
+                            this.MarkovManager.GenerateNewChain( );
+                        }
+                    };
+            this.TimerControl.TimerEvent =
+                this.CommandRowViewModel.PostAction =
+                obj =>
+                    {
+                        pastTweets.AddTweet( this.MarkovManager.NextChain, this.TimerControl.TriggerTime );
+                        this.TimerControl.NewTriggerTime( );
+                        this.TweetManager.Post( this.MarkovManager.NextChain );
+                        if( initialStates.UseSpecifiedInitialState ) {
+                            this.MarkovManager.GenerateNewChain( initialStates.SelectedState );
+                        } else {
+                            this.MarkovManager.GenerateNewChain( );
+                        }
+                    };
 
-            return this.MarkovManager.Initialize( ) && markovTab.Initialize( ) && initialStates.Initialize() && this.TimerControl.Initialize( ) &&
+            return this.MarkovManager.Initialize( ) && markovTab.Initialize( ) && initialStates.Initialize( ) &&
+                   this.TimerControl.Initialize( ) &&
                    this.TimerControl.Start( );
         }
 

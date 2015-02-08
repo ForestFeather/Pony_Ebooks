@@ -21,11 +21,11 @@
             <Label Margin="5">Selected Initial State: </Label>
             <TextBlock Margin="5" Text="{Binding Path=SelectedState}" />
         </StackPanel>
-        <ListView Grid.Row="2" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        <ListView Grid.Row="2" Margin="5" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                   ItemsSource="{Binding Path=InitialStates}" SelectedItem="{Binding Path=SelectedState}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
+                    <WrapPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>

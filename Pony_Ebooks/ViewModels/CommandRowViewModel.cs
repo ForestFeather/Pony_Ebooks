@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - CommandRowViewModel.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:28 AM, 25/01/2015
-// //  Created Date: 8:30 AM, 24/01/2015
+// //  Last Changed Date: 7:03 AM, 08/02/2015
+// //  Created Date: 7:11 AM, 25/01/2015
 // // 
 // //  Notes:
 // //  
@@ -112,6 +112,15 @@ namespace Pony_Ebooks.ViewModels {
         ///=================================================================================================
         public Action<object> PostAction { get; set; }
 
+        ///=================================================================================================
+        /// <summary>   Gets or sets the generate chain action. </summary>
+        ///
+        /// <value> The generate chain action. </value>
+        ///
+        /// <seealso cref="P:Pony_Ebooks.ViewModels.ICommandRowViewModel.GenerateChainAction"/>
+        ///=================================================================================================
+        public Action<object> GenerateChainAction { get; set; }
+
         #endregion
 
         #region Members
@@ -135,7 +144,7 @@ namespace Pony_Ebooks.ViewModels {
         /// <param name="obj">  The object. </param>
         ///=================================================================================================
         private void NewChain( object obj ) {
-            this._markovManager.GenerateNewChain( );
+            this.GenerateChainAction( obj );
         }
 
         ///=================================================================================================
