@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovManager.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 8:04 AM, 24/01/2015
-// //  Created Date: 9:21 PM, 23/01/2015
+// //  Last Changed Date: 6:20 AM, 08/02/2015
+// //  Created Date: 7:11 AM, 25/01/2015
 // // 
 // //  Notes:
 // //  
@@ -26,7 +26,6 @@ using log4net;
 #endregion
 
 namespace Pony_Ebooks.Models {
-
     ///=================================================================================================
     /// <summary>   Manager for markovs. </summary>
     ///
@@ -35,7 +34,6 @@ namespace Pony_Ebooks.Models {
     /// <seealso cref="T:Pony_Ebooks.Models.IMarkovManager"/>
     /// <seealso cref="T:System.ComponentModel.INotifyPropertyChanged"/>
     ///=================================================================================================
-
     public class MarkovManager : IMarkovManager {
         #region Fields and Constants
 
@@ -62,7 +60,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="sourceFiles">  Source files. </param>
         ///=================================================================================================
-
         public MarkovManager( IDictionary<string, bool> sourceFiles ) {
             this._sourceFiles = sourceFiles;
             _log.Info( "Instantiated Markov Manager with " + this._sourceFiles.Count + " sources." );
@@ -77,7 +74,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The markov chain. </value>
         ///=================================================================================================
-
         protected MarkovChain<string> MarkovChain { get; set; }
 
         #endregion
@@ -91,7 +87,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MinChars"/>
         ///=================================================================================================
-
         public int MinChars { get; set; }
 
         ///=================================================================================================
@@ -101,7 +96,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MaxChars"/>
         ///=================================================================================================
-
         public int MaxChars { get; set; }
 
         ///=================================================================================================
@@ -111,7 +105,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MarkovWeight"/>
         ///=================================================================================================
-
         public int MarkovWeight { get; set; }
 
         ///=================================================================================================
@@ -121,7 +114,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.MarkovOrder"/>
         ///=================================================================================================
-
         public int MarkovOrder { get; set; }
 
         ///=================================================================================================
@@ -131,7 +123,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.NextChain"/>
         ///=================================================================================================
-
         public string NextChain {
             get { return this._nextChain; }
             set {
@@ -147,7 +138,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.PreviousChain"/>
         ///=================================================================================================
-
         public string PreviousChain {
             get { return this._previousChain; }
             set {
@@ -163,7 +153,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="P:Pony_Ebooks.Models.IMarkovManager.SourceTexts"/>
         ///=================================================================================================
-
         public IList<Tuple<string, bool, string>> SourceTexts { get; set; }
 
         ///=================================================================================================
@@ -175,7 +164,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.Initialize()"/>
         ///=================================================================================================
-
         public bool Initialize( ) {
             this.SourceTexts = new List<Tuple<string, bool, string>>( );
             this.MinChars = this.MinChars < 1 ? 1 : this.MinChars;
@@ -206,14 +194,33 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.GenerateNewChain()"/>
         ///=================================================================================================
-
         public string GenerateNewChain( ) {
+            return this.GenerateNewChain( null );
+        }
+
+        ///=================================================================================================
+        /// <summary>   Generates a new chain. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 2/8/2015. </remarks>
+        ///
+        /// <param name="startChain">   The start chain. </param>
+        ///
+        /// <returns>   The new chain. </returns>
+        ///
+        /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.GenerateNewChain(string)"/>
+        ///=================================================================================================
+        public string GenerateNewChain( string startChain ) {
             int len;
             int count = 0;
             string output;
 
+            // Get initial starting chain set
+            var startState = string.IsNullOrEmpty( startChain )
+                                 ? Enumerable.Empty<string>( )
+                                 : startChain.Split( ' ' ).ToArray( );
+
             do {
-                var words = this.MarkovChain.Chain( ).ToList( );
+                var words = this.MarkovChain.Chain( startState ).ToList( );
                 output = string.Empty;
                 for( int i = 0; i < words.Count; i++ ) {
                     output += words[ i ] + ( i == words.Count - 1 ? "" : " " );
@@ -241,7 +248,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.RegenerateSources()"/>
         ///=================================================================================================
-
         public bool RegenerateSources( ) {
             // Wipe current chains
             this.MarkovChain = new MarkovChain<string>( this.MarkovOrder );
@@ -266,7 +272,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.AddSource(string,bool)"/>
         ///=================================================================================================
-
         public bool AddSource( string fileName, bool loadNow ) {
             string text;
             try {
@@ -285,9 +290,21 @@ namespace Pony_Ebooks.Models {
             return true;
         }
 
-        #endregion
-
-        #region INotifyPropertyChanged Members
+        ///=================================================================================================
+        /// <summary>   Gets the initial chains in this collection. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 2/8/2015. </remarks>
+        ///
+        /// <returns>
+        ///     An enumerator that allows foreach to be used to get the initial chains in this collection.
+        /// </returns>
+        ///
+        /// <seealso cref="M:Pony_Ebooks.Models.IMarkovManager.GetInitialChains()"/>
+        ///=================================================================================================
+        public IEnumerable<string> GetInitialChains( ) {
+            var states = this.MarkovChain.GetInitialStates( );
+            return states.Select( state => string.Join( " ", state.Key ) ).ToList( );
+        }
 
         /// <summary>   Event queue for all listeners interested in PropertyChanged events. </summary>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -303,7 +320,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="text"> The text. </param>
         ///=================================================================================================
-
         private void ParseSourceText( string text ) {
             var wordCount = 0;
             var lines = text.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
@@ -326,7 +342,6 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="propertyName"> (Optional) name of the property. </param>
         ///=================================================================================================
-
         protected virtual void OnPropertyChanged( [ CallerMemberName ] string propertyName = null ) {
             var handler = this.PropertyChanged;
             if( handler == null ) {

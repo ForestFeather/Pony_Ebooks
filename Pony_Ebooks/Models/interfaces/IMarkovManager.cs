@@ -3,8 +3,8 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - IMarkovManager.cs 
 // // 
 // //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 5:47 AM, 24/01/2015
-// //  Created Date: 5:33 AM, 24/01/2015
+// //  Last Changed Date: 6:07 AM, 08/02/2015
+// //  Created Date: 7:11 AM, 25/01/2015
 // // 
 // //  Notes:
 // //  
@@ -23,6 +23,8 @@ namespace Pony_Ebooks.Models {
     /// <summary>   Interface for markov manager. </summary>
     ///
     /// <remarks>   Collin O' Connor, 1/23/2015. </remarks>
+    ///
+    /// <seealso cref="T:INotifyPropertyChanged"/>
     ///=================================================================================================
     public interface IMarkovManager : INotifyPropertyChanged {
         #region Properties
@@ -95,6 +97,15 @@ namespace Pony_Ebooks.Models {
         string GenerateNewChain( );
 
         ///=================================================================================================
+        /// <summary>   Generates a new chain. </summary>
+        ///
+        /// <param name="startChain">   The start chain. </param>
+        ///
+        /// <returns>   The new chain. </returns>
+        ///=================================================================================================
+        string GenerateNewChain( string startChain );
+
+        ///=================================================================================================
         /// <summary>   Determines if we can regenerate sources. </summary>
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
@@ -110,6 +121,15 @@ namespace Pony_Ebooks.Models {
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///=================================================================================================
         bool AddSource( string fileName, bool loadNow );
+
+        ///=================================================================================================
+        /// <summary>   Gets the initial chains in this collection. </summary>
+        ///
+        /// <returns>
+        ///     An enumerator that allows foreach to be used to get the initial chains in this collection.
+        /// </returns>
+        ///=================================================================================================
+        IEnumerable<string> GetInitialChains( );
 
         #endregion
     }
