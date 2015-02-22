@@ -3,19 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - TimerControlTabViewModel.cs 
 // // 
 // //  Last Changed By: ForestFeather - 
-// //  Last Changed Date: 3:55 AM, 22/02/2015
-// //  Created Date: 5:54 PM, 11/02/2015
-// // 
-// //  Notes:
-// //  
-// // ==========================================================================================================
-
-#region Imported Namespaces // // 
-
-#region Imported Namespaces // //  File ID: Pony_Ebooks - Pony_Ebooks - TimerControlTabViewModel.cs 
-// // 
-// //  Last Changed By: ForestFeather - 
-// //  Last Changed Date: 3:54 AM, 22/02/2015
+// //  Last Changed Date: 4:36 AM, 22/02/2015
 // //  Created Date: 5:54 PM, 11/02/2015
 // // 
 // //  Notes:
@@ -26,6 +14,8 @@
 
 using System;
 using System.ComponentModel;
+
+using log4net;
 
 using Pony_Ebooks.Framework;
 using Pony_Ebooks.Models;
@@ -43,6 +33,9 @@ namespace Pony_Ebooks.ViewModels {
     /// <seealso cref="T:Pony_Ebooks.ViewModels.ITimerControlTabViewModel"/>
     ///=================================================================================================
     public class TimerControlTabViewModel : TabViewModel, ITimerControlTabViewModel {
+
+        /// <summary>   The log. </summary>
+        private static readonly ILog _log = LogManager.GetLogger( typeof( TimerControlTabViewModel ) );
 
         /// <summary>   The maximum in hours. </summary>
         private int _maxHours;
@@ -101,12 +94,14 @@ namespace Pony_Ebooks.ViewModels {
 
             if( onDispose ) {
                 // Managed
-                Settings.Default.TimerMinSeconds = this._timerControl.MinSeconds;
-                Settings.Default.TimerMaxSeconds = this._timerControl.MaxSeconds;
-                Settings.Default.Save( );
+
             }
 
             // Unmanaged
+            Settings.Default.TimerMinSeconds = this._timerControl.MinSeconds;
+            Settings.Default.TimerMaxSeconds = this._timerControl.MaxSeconds;
+            Settings.Default.Save();
+            _log.Info("Saved Timer settings.");
         }
 
         #endregion

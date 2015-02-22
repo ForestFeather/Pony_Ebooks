@@ -7,7 +7,8 @@
         xmlns:UserControls="clr-namespace:Pony_Ebooks.UserControls"
         xmlns:ViewModels="clr-namespace:Pony_Ebooks.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance d:Type=ViewModels:IMainWindowViewModel}">
+        d:DataContext="{d:DesignInstance d:Type=ViewModels:IMainWindowViewModel}"
+        Closed="MainWindow_OnClosed">
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type ViewModels:PastTweetsTabViewModel}">

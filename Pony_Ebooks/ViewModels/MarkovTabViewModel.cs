@@ -2,9 +2,9 @@
 // // 
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTabViewModel.cs 
 // // 
-// //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 6:18 AM, 01/02/2015
-// //  Created Date: 9:53 PM, 27/01/2015
+// //  Last Changed By: ForestFeather - 
+// //  Last Changed Date: 4:33 AM, 22/02/2015
+// //  Created Date: 5:54 PM, 11/02/2015
 // // 
 // //  Notes:
 // //  
@@ -16,24 +16,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+using log4net;
+
 using Microsoft.Win32;
 
 using Pony_Ebooks.Framework;
 using Pony_Ebooks.Models;
-
-using log4net;
+using Pony_Ebooks.Properties;
 
 #endregion
 
 namespace Pony_Ebooks.ViewModels {
-    ///=================================================================================================
-    /// <summary>   Markov tab view model. </summary>
+    ///-------------------------------------------------------------------------------------------------
+    /// <summary>   A ViewModel for the markov tab. </summary>
     ///
-    /// <remarks>   Collin O' Connor, 1/27/2015. </remarks>
-    ///
-    /// <seealso cref="T:Pony_Ebooks.Framework.TabViewModel"/>
-    /// <seealso cref="T:Pony_Ebooks.ViewModels.IMarkovTabViewModel"/>
-    ///=================================================================================================
+    /// <remarks>   Forest Feather, 2/22/2015. </remarks>
+    ///-------------------------------------------------------------------------------------------------
     public class MarkovTabViewModel : TabViewModel, IMarkovTabViewModel {
         #region Fields and Constants
 
@@ -62,13 +60,13 @@ namespace Pony_Ebooks.ViewModels {
 
         #region Constructors
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Constructor. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="markovManager">    Manager for markov. </param>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public MarkovTabViewModel( IMarkovManager markovManager ) {
             this._markovManager = markovManager;
             this.SourceTexts = new ObservableCollection<Pair<string, bool>>( );
@@ -79,13 +77,11 @@ namespace Pony_Ebooks.ViewModels {
 
         #region IMarkovTabViewModel Members
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the minimum characters. </summary>
         ///
         /// <value> The minimum characters. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.MinChars"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public int MinChars {
             get { return this._minChars; }
             set {
@@ -94,13 +90,11 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the maximum characters. </summary>
         ///
         /// <value> The maximum characters. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.MaxChars"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public int MaxChars {
             get { return this._maxChars; }
             set {
@@ -109,13 +103,11 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the weight. </summary>
         ///
         /// <value> The weight. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.Weight"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public int Weight {
             get { return this._weight; }
             set {
@@ -124,13 +116,11 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the order. </summary>
         ///
         /// <value> The order. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.Order"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public int Order {
             get { return this._order; }
             set {
@@ -139,13 +129,11 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets a value indicating whether the sources was loaded. </summary>
         ///
         /// <value> true if sources loaded, false if not. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.SourcesLoaded"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public bool SourcesLoaded {
             get { return this._sourcesLoaded; }
             set {
@@ -154,69 +142,55 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets source texts. </summary>
         ///
         /// <value> The source texts. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.SourceTexts"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public ObservableCollection<Pair<string, bool>> SourceTexts { get; set; }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the save settings command. </summary>
         ///
         /// <value> The save settings command. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.SaveSettingsCommand"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public IRelayCommand SaveSettingsCommand { get; private set; }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the reload settings command. </summary>
         ///
         /// <value> The reload settings command. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.ReloadSettingsCommand"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public IRelayCommand ReloadSettingsCommand { get; private set; }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the add source command. </summary>
         ///
         /// <value> The add source command. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.AddSourceCommand"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public IRelayCommand AddSourceCommand { get; private set; }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the load selected sources command. </summary>
         ///
         /// <value> The load selected sources command. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.LoadSelectedSourcesCommand"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public IRelayCommand LoadSelectedSourcesCommand { get; private set; }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Gets or sets the remove selected sources command. </summary>
         ///
         /// <value> The remove selected sources command. </value>
-        ///
-        /// <seealso cref="P:Pony_Ebooks.ViewModels.IMarkovTabViewModel.RemoveSelectedSourcesCommand"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public IRelayCommand RemoveSelectedSourcesCommand { get; private set; }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Initializes this object. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/27/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
-        ///
-        /// <seealso cref="M:Pony_Ebooks.ViewModels.IMarkovTabViewModel.Initialize()"/>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         public bool Initialize( ) {
             // Set vars from base
             if( !this.LoadVarsFromSource( ) ) {
@@ -229,9 +203,11 @@ namespace Pony_Ebooks.ViewModels {
             this.ReloadSettingsCommand = new RelayCommand( this.OnReloadSettings );
             this.AddSourceCommand = new RelayCommand( this.OnAddSource );
             this.LoadSelectedSourcesCommand = new RelayCommand(
-                this.OnLoadSelectedSources, this.CanLoadSelectedSources );
+                this.OnLoadSelectedSources,
+                this.CanLoadSelectedSources );
             this.RemoveSelectedSourcesCommand = new RelayCommand(
-                this.OnRemoveSelectedSources, this.CanRemoveSelectedSources );
+                this.OnRemoveSelectedSources,
+                this.CanRemoveSelectedSources );
 
             return true;
         }
@@ -240,30 +216,30 @@ namespace Pony_Ebooks.ViewModels {
 
         #region Members
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Determine if we can remove selected sources. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
         ///
         /// <returns>   true if we can remove selected sources, false if not. </returns>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private bool CanRemoveSelectedSources( object obj ) {
             return true;
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Executes the remove selected sources action. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private void OnRemoveSelectedSources( object obj ) {
             // Get rid of them from the root
             this._markovManager.SourceTexts.Clear( );
-            var texts = new List<Pair<string, bool>>( SourceTexts );
+            var texts = new List<Pair<string, bool>>( this.SourceTexts );
             foreach( var sourceText in texts ) {
                 if( !sourceText.Item2 ) {
                     this._markovManager.AddSource( sourceText.Item1, true );
@@ -273,26 +249,26 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Determine if we can load selected sources. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
         ///
         /// <returns>   true if we can load selected sources, false if not. </returns>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private bool CanLoadSelectedSources( object obj ) {
             return true;
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Executes the load selected sources action. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private void OnLoadSelectedSources( object obj ) {
             // Save sources and load them
             this._markovManager.SourceTexts.Clear( );
@@ -301,24 +277,21 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Executes the add source action. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
-        ///
-        /// <exception cref="NotImplementedException">  Thrown when the requested operation is
-        ///                                             unimplemented. </exception>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private void OnAddSource( object obj ) {
             var fileDialog = new OpenFileDialog
-                                 {
-                                     Filter = "Text files (*.txt)|*.txt",
-                                     InitialDirectory =
-                                         Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ),
-                                     Multiselect = true
-                                 };
+                             {
+                                 Filter = "Text files (*.txt)|*.txt",
+                                 InitialDirectory =
+                                     Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ),
+                                 Multiselect = true
+                             };
 
             if( fileDialog.ShowDialog( ) != true ) {
                 return;
@@ -330,38 +303,38 @@ namespace Pony_Ebooks.ViewModels {
             }
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Executes the reload settings action. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private void OnReloadSettings( object obj ) {
             this.LoadVarsFromSource( );
             this.IsDirty = false;
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Determine if we can save settings. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
         ///
         /// <returns>   true if we can save settings, false if not. </returns>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private bool CanSaveSettings( object obj ) {
             return this.IsDirty;
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Executes the save settings action. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <param name="obj">  The object. </param>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private void OnSaveSettings( object obj ) {
             try {
                 this._markovManager.MinChars = this.MinChars;
@@ -383,15 +356,21 @@ namespace Pony_Ebooks.ViewModels {
             this.IsDirty = false;
         }
 
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         /// <summary>   Loads variables from source. </summary>
         ///
-        /// <remarks>   Collin O' Connor, 1/31/2015. </remarks>
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
-        ///=================================================================================================
+        ///-------------------------------------------------------------------------------------------------
         private bool LoadVarsFromSource( ) {
             try {
+                // Load settings
+                this._markovManager.MinChars = Settings.Default.MarkovMinChars;
+                this._markovManager.MaxChars = Settings.Default.MarkovMaxChars;
+                this._markovManager.MarkovWeight = Settings.Default.MarkovWeight;
+                this._markovManager.MarkovOrder = Settings.Default.MarkovOrder;
+
                 // Load static
                 this.MinChars = this._markovManager.MinChars;
                 this.MaxChars = this._markovManager.MaxChars;
@@ -410,6 +389,33 @@ namespace Pony_Ebooks.ViewModels {
 
             return true;
         }
+
+        #region Overrides of ViewModel
+
+        ///-------------------------------------------------------------------------------------------------
+        /// <summary>   Executes the dispose action. </summary>
+        ///
+        /// <remarks>   Forest Feather, 2/22/2015. </remarks>
+        ///
+        /// <param name="onDispose">    true to on dispose. </param>
+        ///-------------------------------------------------------------------------------------------------
+        protected override void OnDispose( bool onDispose ) {
+            base.OnDispose( onDispose );
+
+            if( onDispose ) {
+
+            }
+
+            // Load settings
+            Settings.Default.MarkovMinChars = this._markovManager.MinChars;
+            Settings.Default.MarkovMaxChars = this._markovManager.MaxChars;
+            Settings.Default.MarkovWeight = this._markovManager.MarkovWeight;
+            Settings.Default.MarkovOrder = this._markovManager.MarkovOrder;
+            Settings.Default.Save();
+            _log.Info("Saved Markov settings.");
+        }
+
+        #endregion
 
         #endregion
     }

@@ -178,6 +178,26 @@ namespace Pony_Ebooks.ViewModels {
                    this.TimerControl.Start( );
         }
 
+        ///=================================================================================================
+        /// <summary>   Executes the dispose action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/23/2015. </remarks>
+        ///
+        /// <param name="onDispose">    true to on dispose. </param>
+        ///=================================================================================================
+        protected override void OnDispose( bool onDispose ) {
+            base.OnDispose( onDispose );
+
+            if( onDispose ) {
+                // Managed
+                foreach( var tabViewModel in this.TabViewModels ) {
+                    tabViewModel.Dispose();
+                }
+            }
+
+            // Unmanaged
+        }
+
         #endregion
     }
 }
