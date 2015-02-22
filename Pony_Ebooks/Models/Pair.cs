@@ -10,6 +10,8 @@
 // //  
 // // ==========================================================================================================
 
+using System;
+
 namespace Pony_Ebooks.Models {
     ///=================================================================================================
     /// <summary>   Pair. </summary>
@@ -19,6 +21,7 @@ namespace Pony_Ebooks.Models {
     /// <typeparam name="T">    Generic type parameter. </typeparam>
     /// <typeparam name="U">    Generic type parameter. </typeparam>
     ///=================================================================================================
+    [Serializable]
     public class Pair<T, U> {
         #region Constructors
 

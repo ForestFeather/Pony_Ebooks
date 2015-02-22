@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - MarkovTabViewModel.cs 
 // // 
 // //  Last Changed By: ForestFeather - 
-// //  Last Changed Date: 4:33 AM, 22/02/2015
+// //  Last Changed Date: 9:01 AM, 22/02/2015
 // //  Created Date: 5:54 PM, 11/02/2015
 // // 
 // //  Notes:
@@ -15,6 +15,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.IO;
+using System.Xml.Serialization;
 
 using log4net;
 
@@ -371,6 +374,20 @@ namespace Pony_Ebooks.ViewModels {
                 this._markovManager.MarkovWeight = Settings.Default.MarkovWeight;
                 this._markovManager.MarkovOrder = Settings.Default.MarkovOrder;
 
+                // Load sources
+                this._markovManager.SourceTexts.Clear( );
+                var sources = Settings.Default.MarkovSources;
+
+                if( sources != null ) {
+                    foreach( var source in sources ) {
+                        var reader = new StringReader( source );
+                        var serializer = new XmlSerializer( typeof( Pair<string, bool> ) );
+                        var instance = (Pair<string, bool>) serializer.Deserialize( reader );
+                        this._markovManager.SourceTexts.Add(
+                            new Tuple<string, bool, string>( instance.Item1, instance.Item2, null ) );
+                    }
+                }
+
                 // Load static
                 this.MinChars = this._markovManager.MinChars;
                 this.MaxChars = this._markovManager.MaxChars;
@@ -402,17 +419,24 @@ namespace Pony_Ebooks.ViewModels {
         protected override void OnDispose( bool onDispose ) {
             base.OnDispose( onDispose );
 
-            if( onDispose ) {
-
-            }
+            if( onDispose ) { }
 
             // Load settings
             Settings.Default.MarkovMinChars = this._markovManager.MinChars;
             Settings.Default.MarkovMaxChars = this._markovManager.MaxChars;
             Settings.Default.MarkovWeight = this._markovManager.MarkovWeight;
             Settings.Default.MarkovOrder = this._markovManager.MarkovOrder;
-            Settings.Default.Save();
-            _log.Info("Saved Markov settings.");
+            var collection = new StringCollection( );
+            foreach( var source in this._markovManager.SourceTexts ) {
+                var reader = new Pair<string, bool>( source.Item1, source.Item2 );
+                var serializer = new XmlSerializer( typeof( Pair<string, bool> ) );
+                var writer = new StringWriter( );
+                serializer.Serialize( writer, reader );
+                collection.Add( writer.ToString( ) );
+            }
+            Settings.Default.MarkovSources = collection;
+            Settings.Default.Save( );
+            _log.Info( "Saved Markov settings." );
         }
 
         #endregion

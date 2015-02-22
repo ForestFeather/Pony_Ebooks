@@ -145,13 +145,12 @@ namespace Pony_Ebooks.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        public global::System.Collections.Specialized.StringCollection MarkovSources {
             get {
-                return ((string)(this["Setting"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["MarkovSources"]));
             }
             set {
-                this["Setting"] = value;
+                this["MarkovSources"] = value;
             }
         }
     }
