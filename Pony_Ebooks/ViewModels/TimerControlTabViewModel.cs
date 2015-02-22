@@ -2,9 +2,21 @@
 // // 
 // //  File ID: Pony_Ebooks - Pony_Ebooks - TimerControlTabViewModel.cs 
 // // 
-// //  Last Changed By: Collin O'Connor - Ridayah
-// //  Last Changed Date: 11:37 AM, 08/02/2015
-// //  Created Date: 11:24 AM, 08/02/2015
+// //  Last Changed By: ForestFeather - 
+// //  Last Changed Date: 3:55 AM, 22/02/2015
+// //  Created Date: 5:54 PM, 11/02/2015
+// // 
+// //  Notes:
+// //  
+// // ==========================================================================================================
+
+#region Imported Namespaces // // 
+
+#region Imported Namespaces // //  File ID: Pony_Ebooks - Pony_Ebooks - TimerControlTabViewModel.cs 
+// // 
+// //  Last Changed By: ForestFeather - 
+// //  Last Changed Date: 3:54 AM, 22/02/2015
+// //  Created Date: 5:54 PM, 11/02/2015
 // // 
 // //  Notes:
 // //  
@@ -17,6 +29,7 @@ using System.ComponentModel;
 
 using Pony_Ebooks.Framework;
 using Pony_Ebooks.Models;
+using Pony_Ebooks.Properties;
 
 #endregion
 
@@ -70,6 +83,30 @@ namespace Pony_Ebooks.ViewModels {
         public TimerControlTabViewModel( ITimerControl timerControl ) {
             this._timerControl = timerControl;
             this.Title = "Timer Control";
+        }
+
+        #endregion
+
+        #region Overrides of ViewModel
+
+        ///=================================================================================================
+        /// <summary>   Executes the dispose action. </summary>
+        ///
+        /// <remarks>   Collin O' Connor, 1/23/2015. </remarks>
+        ///
+        /// <param name="onDispose">    true to on dispose. </param>
+        ///=================================================================================================
+        protected override void OnDispose( bool onDispose ) {
+            base.OnDispose( onDispose );
+
+            if( onDispose ) {
+                // Managed
+                Settings.Default.TimerMinSeconds = this._timerControl.MinSeconds;
+                Settings.Default.TimerMaxSeconds = this._timerControl.MaxSeconds;
+                Settings.Default.Save( );
+            }
+
+            // Unmanaged
         }
 
         #endregion
@@ -218,6 +255,10 @@ namespace Pony_Ebooks.ViewModels {
             this.SetNewTimespansCommand = new RelayCommand( this.OnNewTimespans, this.CanNewTimespans );
 
             this.PropertyChanged += this.OnTimerSettingsChanged;
+
+            // Load Timer Settings
+            this._timerControl.MinSeconds = Settings.Default.TimerMinSeconds;
+            this._timerControl.MaxSeconds = Settings.Default.TimerMaxSeconds;
 
             this._totalMinTimespan = new TimeSpan( 0, 0, this._timerControl.MinSeconds );
             this._minSeconds = this.TotalMinTimespan.Seconds;
