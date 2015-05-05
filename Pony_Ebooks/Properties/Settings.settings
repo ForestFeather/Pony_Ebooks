@@ -2,37 +2,37 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Pony_Ebooks.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Consumer_Key" Type="System.String" Scope="User">
+    <Setting Name="Consumer_Key" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Consumer_Secret" Type="System.String" Scope="User">
+    <Setting Name="Consumer_Secret" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="AccessToken_Key" Type="System.String" Scope="User">
+    <Setting Name="AccessToken_Key" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="AccessToken_Secret" Type="System.String" Scope="User">
+    <Setting Name="AccessToken_Secret" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="TimerMinSeconds" Type="System.Int32" Scope="User">
+    <Setting Name="TimerMinSeconds" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">300</Value>
     </Setting>
-    <Setting Name="TimerMaxSeconds" Type="System.Int32" Scope="User">
+    <Setting Name="TimerMaxSeconds" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10800</Value>
     </Setting>
-    <Setting Name="MarkovMinChars" Type="System.Int32" Scope="User">
+    <Setting Name="MarkovMinChars" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">16</Value>
     </Setting>
-    <Setting Name="MarkovMaxChars" Type="System.Int32" Scope="User">
+    <Setting Name="MarkovMaxChars" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">128</Value>
     </Setting>
-    <Setting Name="MarkovWeight" Type="System.Int32" Scope="User">
+    <Setting Name="MarkovWeight" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="MarkovOrder" Type="System.Int32" Scope="User">
+    <Setting Name="MarkovOrder" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="MarkovSources" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="MarkovSources" Provider="PortableSettingsProvider" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

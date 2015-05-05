@@ -71,6 +71,7 @@
       <HintPath>packages\PCLWebUtility.1.0.2\Lib\portable-net4+sl4+wp7+win8\PCLWebUtility.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
@@ -131,6 +132,7 @@
     <Compile Include="Models\Pair.cs" />
     <Compile Include="Models\TimerControl.cs" />
     <Compile Include="Models\TweetManager.cs" />
+    <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UserControls\CommandRowView.xaml.cs">
       <DependentUpon>CommandRowView.xaml</DependentUpon>
@@ -233,7 +235,7 @@
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
