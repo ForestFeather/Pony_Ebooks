@@ -132,6 +132,7 @@
     <Compile Include="Models\Pair.cs" />
     <Compile Include="Models\TimerControl.cs" />
     <Compile Include="Models\TweetManager.cs" />
+    <Compile Include="Models\TwitterFeedMarkovManager.cs" />
     <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UserControls\CommandRowView.xaml.cs">
@@ -261,7 +262,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="log4net.xml">
+    <None Include="log4net.config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

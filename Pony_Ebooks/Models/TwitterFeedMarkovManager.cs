@@ -3,7 +3,7 @@
 // //  File ID: Pony_Ebooks - Pony_Ebooks - TwitterFeedMarkovManager.cs 
 // // 
 // //  Last Changed By: ForestFeather - 
-// //  Last Changed Date: 6:00 AM, 05/05/2015
+// //  Last Changed Date: 6:11 AM, 05/05/2015
 // //  Created Date: 5:24 AM, 05/05/2015
 // // 
 // //  Notes:
@@ -25,18 +25,23 @@ using Tweetinvi;
 using Tweetinvi.Core.Interfaces;
 
 namespace Pony_Ebooks.Models {
+
     ///-------------------------------------------------------------------------------------------------
     /// <summary>   Manager for twitter feed markovs. </summary>
     ///
     /// <remarks>   Forest Feather, 5/5/2015. </remarks>
     ///-------------------------------------------------------------------------------------------------
+
     public class TwitterFeedMarkovManager : IMarkovManager {
 
         /// <summary>   The log. </summary>
-        private static readonly ILog _log = LogManager.GetLogger( typeof( MarkovManager ) );
+        private static readonly ILog _log = LogManager.GetLogger( typeof( TwitterFeedMarkovManager ) );
 
         /// <summary>   Source files. </summary>
         private readonly IDictionary<string, bool> _sourceFiles;
+
+        /// <summary>   List of identifiers for the last tweets. </summary>
+        private long[] _lastTweetIds;
 
         /// <summary>   The next chain. </summary>
         private string _nextChain;
@@ -51,9 +56,11 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="sourceFiles">  Source files. </param>
         ///-------------------------------------------------------------------------------------------------
+
         public TwitterFeedMarkovManager( IDictionary<string, bool> sourceFiles ) {
             this._sourceFiles = sourceFiles;
             _log.Info( "Instantiated Markov Manager with " + this._sourceFiles.Count + " sources." );
+            this.PropertyChanged += ( sender, args ) => { this.UpdateTwitterTimeline( ); };
         }
 
         ///-------------------------------------------------------------------------------------------------
@@ -61,6 +68,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The markov chain. </value>
         ///-------------------------------------------------------------------------------------------------
+
         protected MarkovChain<string> MarkovChain { get; set; }
 
         /// <summary>   Event queue for all listeners interested in PropertyChanged events. </summary>
@@ -71,6 +79,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The minimum characters. </value>
         ///-------------------------------------------------------------------------------------------------
+
         public int MinChars { get; set; }
 
         ///-------------------------------------------------------------------------------------------------
@@ -78,6 +87,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The maximum characters. </value>
         ///-------------------------------------------------------------------------------------------------
+
         public int MaxChars { get; set; }
 
         ///-------------------------------------------------------------------------------------------------
@@ -85,6 +95,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The markov weight. </value>
         ///-------------------------------------------------------------------------------------------------
+
         public int MarkovWeight { get; set; }
 
         ///-------------------------------------------------------------------------------------------------
@@ -92,6 +103,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The markov order. </value>
         ///-------------------------------------------------------------------------------------------------
+
         public int MarkovOrder { get; set; }
 
         ///-------------------------------------------------------------------------------------------------
@@ -99,6 +111,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The next chain. </value>
         ///-------------------------------------------------------------------------------------------------
+
         public string NextChain {
             get { return this._nextChain; }
             set {
@@ -112,6 +125,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The previous chain. </value>
         ///-------------------------------------------------------------------------------------------------
+
         public string PreviousChain {
             get { return this._previousChain; }
             set {
@@ -125,6 +139,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <value> The source texts. </value>
         ///-------------------------------------------------------------------------------------------------
+
         public IList<Tuple<string, bool, string>> SourceTexts { get; set; }
 
         ///-------------------------------------------------------------------------------------------------
@@ -134,6 +149,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///-------------------------------------------------------------------------------------------------
+
         public bool Initialize( ) {
             this.SourceTexts = new List<Tuple<string, bool, string>>( );
             this.MinChars = this.MinChars < 1 ? 1 : this.MinChars;
@@ -147,10 +163,15 @@ namespace Pony_Ebooks.Models {
                 this.AddSource( sourceFile.Key, sourceFile.Value );
             }
 
+            _lastTweetIds = new long[0];
+
+            // Get twitter stream
+            this.UpdateTwitterTimeline( );
+
             // Preload a chain and return if we can
-            if( this.SourceTexts.Count == 0 ) {
-                return false;
-            }
+            //if( this.SourceTexts.Count == 0 ) {
+            //    return false;
+            //}
             this.NextChain = this.GenerateNewChain( );
             return true;
         }
@@ -162,6 +183,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <returns>   The new chain. </returns>
         ///-------------------------------------------------------------------------------------------------
+
         public string GenerateNewChain( ) {
             return this.GenerateNewChain( null );
         }
@@ -175,6 +197,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <returns>   The new chain. </returns>
         ///-------------------------------------------------------------------------------------------------
+
         public string GenerateNewChain( string startChain ) {
             int len;
             int count = 0;
@@ -212,20 +235,14 @@ namespace Pony_Ebooks.Models {
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///-------------------------------------------------------------------------------------------------
+
         public bool RegenerateSources( ) {
             // Wipe current chains
             this.MarkovChain = new MarkovChain<string>( this.MarkovOrder );
 
             // Regen all items
             // Create a parameter for queries with specific parameters
-            var timelineParameter = Timeline.CreateHomeTimelineRequestParameter( );
-            timelineParameter.ExcludeReplies = true;
-            timelineParameter.TrimUser = true;
-            timelineParameter.MaximumNumberOfTweetsToRetrieve = 250;
-            var tweets = Timeline.GetHomeTimeline( timelineParameter );
-            foreach( var tweet in tweets ) {
-                this.AddSource( tweet );
-            }
+            this.UpdateTwitterTimeline( );
 
             return this.SourceTexts.Count == 0;
         }
@@ -240,6 +257,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <returns>   true if it succeeds, false if it fails. </returns>
         ///-------------------------------------------------------------------------------------------------
+
         public bool AddSource( string fileName, bool loadNow ) {
             string text;
             try {
@@ -267,10 +285,31 @@ namespace Pony_Ebooks.Models {
         ///     An enumerator that allows foreach to be used to get the initial chains in this collection.
         /// </returns>
         ///-------------------------------------------------------------------------------------------------
+
         public IEnumerable<string> GetInitialChains( ) {
             var states = this.MarkovChain.GetInitialStates( );
             var orderedStates = states.OrderByDescending( kvp => kvp.Value );
             return orderedStates.Select( state => string.Join( " ", state.Key ) ).ToList( );
+        }
+
+        ///-------------------------------------------------------------------------------------------------
+        /// <summary>   Updates the twitter timeline. </summary>
+        ///
+        /// <remarks>   Forest Feather, 5/5/2015. </remarks>
+        ///-------------------------------------------------------------------------------------------------
+
+        protected virtual void UpdateTwitterTimeline( ) {
+            var timelineParameter = Timeline.CreateHomeTimelineRequestParameter( );
+            timelineParameter.ExcludeReplies = true;
+            timelineParameter.TrimUser = true;
+            timelineParameter.MaximumNumberOfTweetsToRetrieve = 250;
+            var tweets = Timeline.GetHomeTimeline( timelineParameter );
+            var enumerable = tweets as ITweet[] ?? tweets.ToArray( );
+            foreach( var tweet in enumerable.Where( tweet => !this._lastTweetIds.Contains( tweet.Id ) ) ) {
+                this.AddSource( tweet );
+            }
+
+            this._lastTweetIds = enumerable.Select( tweet => tweet.Id ).ToArray( );
         }
 
         ///-------------------------------------------------------------------------------------------------
@@ -280,6 +319,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="fileName"> Filename of the file. </param>
         ///-------------------------------------------------------------------------------------------------
+
         private void AddSource( ITweet fileName ) {
             var wordCount = 0;
             var lines = fileName.Text.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
@@ -291,7 +331,7 @@ namespace Pony_Ebooks.Models {
                         line =>
                         line.Trim( )
                             .Split( new[] { " " }, StringSplitOptions.None )
-                            .Where( word => !word.StartsWith( "http" ) )
+                            .Where( word => !word.StartsWith( "http" ) && !word.StartsWith( "@" ) )
                             .ToArray( ) ) ) {
                 this.MarkovChain.Add( words );
                 wordCount += words.Length;
@@ -309,6 +349,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="text"> The text. </param>
         ///-------------------------------------------------------------------------------------------------
+
         private void ParseSourceText( string text ) {
             var wordCount = 0;
             var lines = text.Split( new[] { Environment.NewLine }, StringSplitOptions.None );
@@ -331,6 +372,7 @@ namespace Pony_Ebooks.Models {
         ///
         /// <param name="propertyName"> Name of the property. </param>
         ///-------------------------------------------------------------------------------------------------
+
         protected virtual void OnPropertyChanged( [ CallerMemberName ] string propertyName = null ) {
             var handler = this.PropertyChanged;
             if( handler == null ) {

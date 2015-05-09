@@ -75,7 +75,7 @@ namespace Pony_Ebooks {
         private void InitLogger( ) {
             // Set up a simple configuration that logs on the console.
             BasicConfigurator.Configure( );
-            XmlConfigurator.Configure( new FileInfo( "log4net.xml" ) );
+            XmlConfigurator.Configure( new FileInfo( "log4net.config.xml" ) );
 
             _log.Info( "Entering application." );
         }

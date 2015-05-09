@@ -116,9 +116,9 @@ namespace Pony_Ebooks.ViewModels {
         /// <seealso cref="M:Pony_Ebooks.ViewModels.IMainWindowViewModel.Initialize()"/>
         ///=================================================================================================
         public bool Initialize( ) {
-            var files = new Dictionary<string, bool> { { "S1.txt", true } };
+            var files = new Dictionary<string, bool> { };
 
-            this.MarkovManager = new MarkovManager( files )
+            this.MarkovManager = new TwitterFeedMarkovManager( files )
                                      {
                                          MarkovOrder = 1,
                                          MarkovWeight = 1,
